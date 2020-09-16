@@ -4,7 +4,7 @@ import {StyleSheet, Text, View} from 'react-native';
 const Akun = () => {
   return (
     <View>
-      <Text></Text>
+      <Text>Akun</Text>
     </View>
   );
 };
