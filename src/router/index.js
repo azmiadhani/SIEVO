@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Splash, Home, Pemilihan, Akun, Timeline} from '../pages';
+import {Splash, Beranda, Pemilihan, Akun, Timeline} from '../pages';
 import BottomNavigation from '../components/BottomNavigator';
 
 const Stack = createStackNavigator();
@@ -28,7 +28,7 @@ const Router = () => {
 const MainApp = () => {
   return (
     <Tab.Navigator tabBar={(props) => <BottomNavigation {...props} />}>
-      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Beranda" component={Beranda} />
       <Tab.Screen name="Timeline" component={Timeline} />
       <Tab.Screen name="Pemilihan" component={Pemilihan} />
       <Tab.Screen name="Akun" component={Akun} />
