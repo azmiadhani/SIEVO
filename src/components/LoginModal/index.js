@@ -1,11 +1,29 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image, Dimensions} from 'react-native';
 import {MainLogo} from '../../assets';
+import {
+  TextField,
+  FilledTextField,
+  OutlinedTextField,
+} from '@ubaids/react-native-material-textfield';
 
 const LoginModal = () => {
   return (
     <View style={styles.container}>
-      <Text>Test</Text>
+      <TextField
+        label="Nomor Induk Mahasiswa"
+        keyboardType="phone-pad"
+        tintColor="rgba(0,0,0,0.4)"
+        baseColor="rgba(0,0,0,0.4)"
+        style={{fontFamily: 'Cabin-Regular'}}
+      />
+      <TextField
+        label="Kata Sandi"
+        keyboardType="phone-pad"
+        tintColor="rgba(0,0,0,0.4)"
+        baseColor="rgba(0,0,0,0.4)"
+        style={{fontFamily: 'Cabin-Regular'}}
+      />
     </View>
   );
 };
