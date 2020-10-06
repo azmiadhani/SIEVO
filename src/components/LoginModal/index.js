@@ -23,12 +23,29 @@ const LoginModal = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  useEffect(() => {
-    // fetch('https://reqres.in/api/users/2')
+  const [text, setText] = useState('');
+  async function getAPIUser() {
+    // fetch('http://192.168.56.1/pemilu-m/user/api')
     //   .then((response) => response.json())
     //   .then((json) => console.log(json));
-
-    // Call API Method POST
+    const dataForAPI = {
+      userUsername: 'admin_kpu',
+    };
+    const fd = new FormData();
+    fd.append('userUsername', 'admin_kpu');
+    fetch('http://192.168.56.1/pemilu-m/user/api', {
+      method: 'POST',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+      body: fd,
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        setText(JSON.stringify(json));
+      });
+  }
+  async function getAPI() {
     const dataForAPI = {
       name: 'morpheus',
       job: 'leader',
@@ -41,15 +58,18 @@ const LoginModal = () => {
       body: JSON.stringify(dataForAPI),
     })
       .then((response) => response.json())
-      .then((json) => console.log(json));
-  }, []);
+      .then((json) => {
+        setUsername(json.name);
+      });
+  }
+
   return (
     <View style={styles.container}>
+      <Text>{text}</Text>
       <Button
         title={username}
         onPress={async () => {
-          console.log(await getMovies());
-          setData(getMovies());
+          getAPIUser();
         }}
       />
       <TextField
