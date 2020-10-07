@@ -24,11 +24,11 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
   },
   logo: {
-    width: 130,
-    height: 175,
+    width: 190,
+    height: 185,
     resizeMode: 'stretch',
   },
   mainLogoContainer: {
-    paddingBottom: 50,
+    paddingBottom: 10,
   },
 });
