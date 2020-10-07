@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, Text, View, ImageBackground, Image} from 'react-native';
 import {SplashBackground, Logo} from '../../assets';
+import {APP_VERSION} from '../../Utils/constant';
 
 const Splash = ({navigation}) => {
   useEffect(() => {
@@ -9,9 +10,10 @@ const Splash = ({navigation}) => {
     }, 3000);
   }, [navigation]);
   return (
-    <ImageBackground source={SplashBackground} style={styles.background}>
+    <View style={styles.background}>
       <Image source={Logo} style={styles.logo}></Image>
-    </ImageBackground>
+      <Text style={styles.version}>version {APP_VERSION}</Text>
+    </View>
   );
 };
 
@@ -22,9 +24,18 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#ffffff',
   },
   logo: {
-    width: 160,
-    height: 430,
+    flex: 1,
+    width: 200,
+    // height: 460,
+    resizeMode: 'contain',
+  },
+  version: {
+    // flex: 1,
+    fontFamily: 'Cabin-Regular',
+    fontSize: 11,
+    paddingBottom: 40,
   },
 });
