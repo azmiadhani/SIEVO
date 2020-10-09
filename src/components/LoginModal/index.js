@@ -18,14 +18,15 @@ import {
 // import {TextInput} from 'react-native-paper';
 
 // import {username} from '../../Utils/globals';
-function ajax(url, username) {
+function ajax(url, pkg) {
   // resource : https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
   // `delay` returns a promise
   return new Promise(function (resolve, reject) {
     // Only `delay` is able to resolve or reject the promise
     const fd = new FormData();
-    console.log(username);
-    fd.append('userUsername', username);
+    console.log(pkg);
+    fd.append('operation', pkg['operation']);
+    fd.append('userUsername', pkg['userUsername']);
     var xhr = new XMLHttpRequest();
     xhr.open('post', url, true);
     xhr.setRequestHeader('X-Requested-With', 'xmlhttprequest');
@@ -71,7 +72,10 @@ const LoginModal = () => {
         title="MASUK"
         style={styles.tombol}
         onPress={() => {
-          ajax('http://192.168.56.1/pemilu-m/user/api', username)
+          ajax('http://192.168.56.1/pemilu-m/mobile/api', {
+            operation: 'login',
+            userUsername: username,
+          })
             .then(function (res) {
               res = JSON.parse(res);
               if (res.status == true) {
@@ -79,7 +83,7 @@ const LoginModal = () => {
               } else {
                 setText('Not found!');
               }
-              console.log(res);
+              // console.log(res);
               // console.log(username);
             })
             .catch(function (res) {
