@@ -26,5 +26,6 @@ const styles = StyleSheet.create({
   input: {
     fontFamily: 'Cabin-Regular',
     fontSize: 12,
+    padding: 0,
   },
 });

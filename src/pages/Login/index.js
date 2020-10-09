@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   footerLogo: {
-    width: 80,
+    width: 90,
     // height: 'auto',
     resizeMode: 'contain',
   },

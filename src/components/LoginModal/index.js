@@ -18,7 +18,7 @@ import {
 // import {TextInput} from 'react-native-paper';
 
 // import {username} from '../../Utils/globals';
-import {HInput} from '../../components';
+import {HInput, HButton} from '../../components';
 function ajax(url, pkg) {
   // resource : https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
   // `delay` returns a promise
@@ -64,10 +64,8 @@ const LoginModal = () => {
         style={styles.input}
       />
       <View style={styles.tombolContainer}>
-        <Button
-          title="Masuk"
-          style={styles.tombol}
-          color="#000000"
+        <HButton
+          label="Login"
           onPress={() => {
             ajax('http://192.168.56.1/pemilu-m/mobile/api', {
               operation: 'login',
@@ -122,7 +120,7 @@ const styles = StyleSheet.create({
   },
   tombol: {
     fontFamily: 'Cabin-Regular',
-    fontSize: 10,
+    fontSize: 11,
   },
   tombolContainer: {
     paddingTop: 30,
