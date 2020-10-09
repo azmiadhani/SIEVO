@@ -94,7 +94,7 @@ const LoginModal = () => {
               } else {
                 setText('Not found!');
               }
-              // console.log(res);
+              console.log(res);
               // console.log(username);
             })
             .catch(function (res) {
