@@ -5,7 +5,6 @@ import {
   View,
   Image,
   Dimensions,
-  Button,
   ActivityIndicator,
   FlatList,
 } from 'react-native';
@@ -15,6 +14,9 @@ import {
   FilledTextField,
   OutlinedTextField,
 } from '@ubaids/react-native-material-textfield';
+import {TextInput, Button} from 'react-native-paper';
+import {Ti} from '../../components/';
+
 // import {TextInput} from 'react-native-paper';
 
 // import {username} from '../../Utils/globals';
@@ -105,8 +107,14 @@ export default LoginModal;
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-
+const theme = {
+  colors: {primary: '#adadad', accent: '#000000', background: '#ffffff00'},
+  fonts: {regular: ''},
+};
 const styles = StyleSheet.create({
+  tombol: {
+    paddingTop: 20,
+  },
   container: {
     backgroundColor: '#F3F3F3',
     padding: 17,
