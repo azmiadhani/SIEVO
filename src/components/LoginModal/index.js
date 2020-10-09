@@ -27,6 +27,7 @@ function ajax(url, pkg) {
     console.log(pkg);
     fd.append('operation', pkg['operation']);
     fd.append('userUsername', pkg['userUsername']);
+    fd.append('userPassword', pkg['userPassword']);
     var xhr = new XMLHttpRequest();
     xhr.open('post', url, true);
     xhr.setRequestHeader('X-Requested-With', 'xmlhttprequest');
@@ -46,7 +47,16 @@ const LoginModal = () => {
 
   return (
     <View style={styles.container}>
-      <Text>{text}</Text>
+      <TextField
+        label="Ajax Req"
+        defaultValue={text}
+        keyboardType="phone-pad"
+        tintColor="rgba(0,0,0,0.4)"
+        baseColor="rgba(0,0,0,0.4)"
+        fontSize={12}
+        style={styles.input}
+      />
+      {/* <Text>{text}</Text> */}
       <TextField
         label="Nomor Induk Mahasiswa"
         defaultValue={username}
@@ -75,11 +85,12 @@ const LoginModal = () => {
           ajax('http://192.168.56.1/pemilu-m/mobile/api', {
             operation: 'login',
             userUsername: username,
+            userPassword: password,
           })
             .then(function (res) {
               res = JSON.parse(res);
               if (res.status == true) {
-                setText(res.data.userUsername);
+                setText(res.data.token);
               } else {
                 setText('Not found!');
               }
