@@ -62,13 +62,10 @@ const LoginModal = () => {
       />
       <View style={styles.tombol}>
         <Button
-          icon="camera"
+          title="masuk"
+          // icon="login"
           mode="contained"
-          onPress={() => console.log('Pressed')}>
-          Press me
-        </Button>
-        <Button
-          title="MASUK"
+          color="#000000"
           onPress={() => {
             ajax('http://192.168.56.1/pemilu-m/mobile/api', {
               operation: 'login',
@@ -88,8 +85,9 @@ const LoginModal = () => {
               .catch(function (res) {
                 console.log(res);
               });
-          }}
-        />
+          }}>
+          Masuk
+        </Button>
       </View>
     </View>
   );
@@ -104,6 +102,9 @@ const theme = {
   fonts: {regular: ''},
 };
 const styles = StyleSheet.create({
+  tombol: {
+    paddingTop: 20,
+  },
   container: {
     backgroundColor: '#F3F3F3',
     padding: 17,
