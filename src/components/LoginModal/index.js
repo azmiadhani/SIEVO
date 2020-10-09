@@ -18,6 +18,7 @@ import {
 // import {TextInput} from 'react-native-paper';
 
 // import {username} from '../../Utils/globals';
+import {HInput} from '../../components';
 function ajax(url, pkg) {
   // resource : https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
   // `delay` returns a promise
@@ -47,60 +48,56 @@ const LoginModal = () => {
 
   return (
     <View style={styles.container}>
+      <HInput
+        label="Nomor Induk Mahasiswa"
+        defaultValue={username}
+        onChangeText={(text) => setUsername(text)}
+      />
       <TextField
-        label="Ajax Req"
+        label="Kata Sandi"
+        value={password}
+        onChangeText={(text) => setPassword(text)}
+        secureTextEntry={true}
+        tintColor="rgba(0,0,0,0.4)"
+        baseColor="rgba(0,0,0,0.4)"
+        fontSize={12}
+        style={styles.input}
+      />
+      <View style={styles.tombolContainer}>
+        <Button
+          title="Masuk"
+          style={styles.tombol}
+          color="#000000"
+          onPress={() => {
+            ajax('http://192.168.56.1/pemilu-m/mobile/api', {
+              operation: 'login',
+              userUsername: username,
+              userPassword: password,
+            })
+              .then(function (res) {
+                res = JSON.parse(res);
+                if (res.status == true) {
+                  setText(res.data.token);
+                } else {
+                  setText('Not found!');
+                }
+                console.log(res);
+                // console.log(username);
+              })
+              .catch(function (res) {
+                console.log(res);
+              });
+          }}
+        />
+      </View>
+      <HInput
+        placeholder="Ajax Req"
         defaultValue={text}
         keyboardType="phone-pad"
         tintColor="rgba(0,0,0,0.4)"
         baseColor="rgba(0,0,0,0.4)"
         fontSize={12}
         style={styles.input}
-      />
-      {/* <Text>{text}</Text> */}
-      <TextField
-        label="Nomor Induk Mahasiswa"
-        defaultValue={username}
-        onChangeText={(text) => setUsername(text)}
-        keyboardType="phone-pad"
-        tintColor="rgba(0,0,0,0.4)"
-        baseColor="rgba(0,0,0,0.4)"
-        fontSize={12}
-        style={styles.input}
-      />
-      <TextField
-        label="Kata Sandi"
-        secureTextEntry={true}
-        value={password}
-        onChangeText={(text) => setPassword(text)}
-        keyboardType="phone-pad"
-        tintColor="rgba(0,0,0,0.4)"
-        baseColor="rgba(0,0,0,0.4)"
-        fontSize={12}
-        style={styles.input}
-      />
-      <Button
-        title="MASUK"
-        style={styles.tombol}
-        onPress={() => {
-          ajax('http://192.168.56.1/pemilu-m/mobile/api', {
-            operation: 'login',
-            userUsername: username,
-            userPassword: password,
-          })
-            .then(function (res) {
-              res = JSON.parse(res);
-              if (res.status == true) {
-                setText(res.data.token);
-              } else {
-                setText('Not found!');
-              }
-              console.log(res);
-              // console.log(username);
-            })
-            .catch(function (res) {
-              console.log(res);
-            });
-        }}
       />
     </View>
   );
@@ -121,8 +118,15 @@ const styles = StyleSheet.create({
   },
   input: {
     fontFamily: 'Cabin-Regular',
+    fontSize: 12,
   },
   tombol: {
-    paddingTop: 20,
+    fontFamily: 'Cabin-Regular',
+    fontSize: 10,
+  },
+  tombolContainer: {
+    paddingTop: 30,
+    paddingBottom: 15,
+    color: '#000000',
   },
 });

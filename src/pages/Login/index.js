@@ -1,15 +1,30 @@
 import React, {useEffect} from 'react';
-import {StyleSheet, Text, View, ImageBackground, Image} from 'react-native';
-import {SplashBackground, Logo, MainLogo} from '../../assets';
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  ImageBackground,
+  Image,
+} from 'react-native';
+import {SplashBackground, Logo, MainLogo, LogoKPUBawaslu} from '../../assets';
 import {LoginModal} from '../../components/';
 const Login = ({navigation}) => {
   return (
-    <View style={styles.background}>
-      <View style={styles.mainLogoContainer}>
-        <Image source={MainLogo} style={styles.logo} />
-      </View>
-      <LoginModal style={styles.loginModal} />
-    </View>
+    <SafeAreaView style={styles.background}>
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.background}>
+          <View style={styles.headerLogoContainer}>
+            <Image source={MainLogo} style={styles.headerLogo} />
+          </View>
+          <LoginModal style={styles.loginModal} />
+          <View style={styles.footerLogoContainer}>
+            <Image source={LogoKPUBawaslu} style={styles.footerLogo} />
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -19,16 +34,24 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: 50,
+    paddingTop: 5,
     backgroundColor: '#FFFFFF',
     // justifyContent: 'center',
   },
-  logo: {
+  headerLogo: {
     width: 190,
     height: 185,
-    resizeMode: 'stretch',
+    resizeMode: 'contain',
   },
-  mainLogoContainer: {
+  footerLogo: {
+    width: 80,
+    // height: 'auto',
+    resizeMode: 'contain',
+  },
+  headerLogoContainer: {
     paddingBottom: 10,
+  },
+  footerLogoContainer: {
+    paddingTop: 10,
   },
 });
