@@ -5,7 +5,6 @@ import {
   View,
   Image,
   Dimensions,
-  Button,
   ActivityIndicator,
   FlatList,
 } from 'react-native';
@@ -15,6 +14,9 @@ import {
   FilledTextField,
   OutlinedTextField,
 } from '@ubaids/react-native-material-textfield';
+import {TextInput, Button} from 'react-native-paper';
+import {Ti} from '../../components/';
+
 // import {TextInput} from 'react-native-paper';
 
 // import {username} from '../../Utils/globals';
@@ -47,61 +49,48 @@ const LoginModal = () => {
 
   return (
     <View style={styles.container}>
-      <TextField
-        label="Ajax Req"
-        defaultValue={text}
-        keyboardType="phone-pad"
-        tintColor="rgba(0,0,0,0.4)"
-        baseColor="rgba(0,0,0,0.4)"
-        fontSize={12}
-        style={styles.input}
-      />
-      {/* <Text>{text}</Text> */}
-      <TextField
-        label="Nomor Induk Mahasiswa"
-        defaultValue={username}
+      <Ti value={text} placeholder="Ajax Result" disabled={true} />
+      <Ti
+        value={username}
         onChangeText={(text) => setUsername(text)}
-        keyboardType="phone-pad"
-        tintColor="rgba(0,0,0,0.4)"
-        baseColor="rgba(0,0,0,0.4)"
-        fontSize={12}
-        style={styles.input}
+        placeholder="Username"
       />
-      <TextField
-        label="Kata Sandi"
-        secureTextEntry={true}
+      <Ti
         value={password}
         onChangeText={(text) => setPassword(text)}
-        keyboardType="phone-pad"
-        tintColor="rgba(0,0,0,0.4)"
-        baseColor="rgba(0,0,0,0.4)"
-        fontSize={12}
-        style={styles.input}
+        placeholder="Password"
       />
-      <Button
-        title="MASUK"
-        style={styles.tombol}
-        onPress={() => {
-          ajax('http://192.168.56.1/pemilu-m/mobile/api', {
-            operation: 'login',
-            userUsername: username,
-            userPassword: password,
-          })
-            .then(function (res) {
-              res = JSON.parse(res);
-              if (res.status == true) {
-                setText(res.data.token);
-              } else {
-                setText('Not found!');
-              }
-              // console.log(res);
-              // console.log(username);
+      <View style={styles.tombol}>
+        <Button
+          icon="camera"
+          mode="contained"
+          onPress={() => console.log('Pressed')}>
+          Press me
+        </Button>
+        <Button
+          title="MASUK"
+          onPress={() => {
+            ajax('http://192.168.56.1/pemilu-m/mobile/api', {
+              operation: 'login',
+              userUsername: username,
+              userPassword: password,
             })
-            .catch(function (res) {
-              console.log(res);
-            });
-        }}
-      />
+              .then(function (res) {
+                res = JSON.parse(res);
+                if (res.status == true) {
+                  setText(res.data.token);
+                } else {
+                  setText('Not found!');
+                }
+                // console.log(res);
+                // console.log(username);
+              })
+              .catch(function (res) {
+                console.log(res);
+              });
+          }}
+        />
+      </View>
     </View>
   );
 };
@@ -110,7 +99,10 @@ export default LoginModal;
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-
+const theme = {
+  colors: {primary: '#adadad', accent: '#000000', background: '#ffffff00'},
+  fonts: {regular: ''},
+};
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#F3F3F3',
@@ -118,11 +110,5 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
     borderRadius: 5,
     width: windowWidth * 0.8,
-  },
-  input: {
-    fontFamily: 'Cabin-Regular',
-  },
-  tombol: {
-    paddingTop: 20,
   },
 });
