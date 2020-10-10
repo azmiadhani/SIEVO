@@ -1,17 +1,38 @@
 import React from 'react';
-import {StyleSheet, Text, View, Dimensions} from 'react-native';
+import {StyleSheet, Text, View, Dimensions,SafeAreaView,ScrollView} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 const Beranda = () => {
   return (
-    <View>
+    <SafeAreaView style={styles.background}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Beranda</Text>
       </View>
-      <View style={styles.body}>
+      <ScrollView style={styles.scrollView}>
         <Text style={styles.bodyText}>Berita</Text>
-      </View>
-    </View>
+        <Text style={styles.bodyText}>Berita</Text>
+        <Text style={styles.bodyText}>Berita</Text>
+        <Text style={styles.bodyText}>Berita</Text>
+        <Text style={styles.bodyText}>Berita</Text>
+        <Text style={styles.bodyText}>Berita</Text>
+        <Text style={styles.bodyText}>Berita</Text>
+        <Text style={styles.bodyText}>Berita</Text>
+        <Text style={styles.bodyText}>Berita</Text>
+        <Text style={styles.bodyText}>Berita</Text>
+        <Text style={styles.bodyText}>Berita</Text>
+        <Text style={styles.bodyText}>Berita</Text>
+        <Text style={styles.bodyText}>Berita</Text>
+        <Text style={styles.bodyText}>Berita</Text>
+        <Text style={styles.bodyText}>Berita</Text>
+        <Text style={styles.bodyText}>Berita</Text>
+        <Text style={styles.bodyText}>Berita</Text>
+        <Text style={styles.bodyText}>Berita</Text>
+        <Text style={styles.bodyText}>Berita</Text>
+        <Text style={styles.bodyText}>Berita</Text>
+        <Text style={styles.bodyText}>Berita</Text>
+        <Text style={styles.bodyText}>Berita</Text>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -30,7 +51,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     paddingTop: windowHeight * 0.05,
     alignItems: 'center',
-    backgroundColor: 'rgba(52, 52, 52, 0)',
+    backgroundColor: 'rgba(0, 0, 0, 0)',
   },
   headerText: {
     fontSize: 22,

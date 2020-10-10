@@ -28,7 +28,7 @@ const TabItem = ({isFocused, onPress, onLongPress, label}) => {
       onLongPress={onLongPress}
       style={styles.container}>
       <Icon style={styles.icon} />
-      <Text style={styles.text(isFocused)}>{label}</Text>
+      {/* <Text style={styles.text(isFocused)}>{label}</Text> */}
     </TouchableOpacity>
   );
 };
