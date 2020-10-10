@@ -32,7 +32,6 @@ const Beranda = () => {
         <Text style={styles.bodyText}>Berita</Text>
         <Text style={styles.bodyText}>Berita</Text>
       </MainContent>
-      x
     </View>
   );
 };

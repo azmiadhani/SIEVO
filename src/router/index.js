@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -26,7 +26,7 @@ const Router = () => {
         component={MainApp}
         options={{headerShown: false}}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="Timeline"
         component={Timeline}
         options={{headerShown: false}}
@@ -39,7 +39,7 @@ const MainApp = ({navigation}) => {
   useEffect(() => {
     // navigation.replace('')
     console.log('mainapp loaded');
-  }, [])
+  }, []);
   return (
     <Tab.Navigator tabBar={(props) => <BottomNavigation {...props} />}>
       <Tab.Screen name="Beranda" component={Beranda} />
