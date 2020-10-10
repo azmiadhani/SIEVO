@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import jwt_decode from "jwt-decode";
 
 export const storeData = async (key,value) => {
     try {
@@ -41,7 +42,7 @@ export const getByKey = (key) => {
     try {
       const value = await AsyncStorage.getItem(key)
       if(value !== null) {
-        resolve(JSON.parse(value));
+        resolve(jwt_decode(value));
       }else{
         resolve(false)
       }

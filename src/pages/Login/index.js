@@ -10,7 +10,12 @@ import {
 } from 'react-native';
 import {SplashBackground, Logo, MainLogo, LogoKPUBawaslu} from '../../assets';
 import {LoginModal} from '../../components/';
+import {storeData,getByKey,removeAllData,getAllKeys,} from '../../Utils/asyncstorage';
 const Login = ({navigation}) => {
+  useEffect(() => {
+    // setToken(getByKey('token'));
+    console.log('page loaded')
+  }, [])
   return (
     <SafeAreaView style={styles.background}>
       <ScrollView style={styles.scrollView}>
@@ -18,7 +23,7 @@ const Login = ({navigation}) => {
           <View style={styles.headerLogoContainer}>
             <Image source={MainLogo} style={styles.headerLogo} />
           </View>
-          <LoginModal style={styles.loginModal} />
+          <LoginModal style={styles.loginModal} navigation={navigation} />
           <View style={styles.footerLogoContainer}>
             <Image source={LogoKPUBawaslu} style={styles.footerLogo} />
           </View>

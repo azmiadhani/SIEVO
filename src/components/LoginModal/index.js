@@ -36,7 +36,7 @@ function ajax(url, pkg) {
     xhr.onerror = reject;
   });
 }
-const LoginModal = () => {
+const LoginModal = (props) => {
   const [user, setUsername] = useState('1611016110005');
   const [pass, setPassword] = useState('jakarta12');
   const [isLoading, setLoading] = useState(true);
@@ -44,17 +44,15 @@ const LoginModal = () => {
   const [text, setText] = useState('');
   const [token, setToken] = useState('');
   useEffect(() => {
-    // setToken(getByKey('token'));
     getByKey('token').then(function (res) {
       if(res){
-       console.log('kunci ada!',res.data.username)
+        props.navigation.replace('MainApp')
       }else{
        console.log('kunci tidak ada!')
       }
      }).catch(function (res) {
        console.log(res);
      });
-    console.log('page loaded')
   }, [token])
   return (
     <View style={styles.container}>
@@ -83,8 +81,8 @@ const LoginModal = () => {
                 res = JSON.parse(res);
                 console.log(res);
                 if (res.token) {
-                  storeData('token', JSON.stringify(token));
-                  setToken(jwt_decode(res.token));
+                  storeData('token', res.token)
+                  setToken(res.token);
                   console.log(token)
                 }
               })
@@ -111,10 +109,6 @@ export default LoginModal;
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-const theme = {
-  colors: {primary: '#adadad', accent: '#000000', background: '#ffffff00'},
-  fonts: {regular: ''},
-};
 const styles = StyleSheet.create({
   tombol: {
     paddingTop: 20,
