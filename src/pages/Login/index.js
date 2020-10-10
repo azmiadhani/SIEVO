@@ -13,6 +13,14 @@ import {LoginModal} from '../../components/';
 import {storeData,getByKey,removeAllData,getAllKeys,} from '../../Utils/asyncstorage';
 const Login = ({navigation}) => {
   useEffect(() => {
+    // getByKey('token').then(function (res) {
+    //   if(res){
+    //     // Jika token ada
+    //     navigation.replace('MainApp')
+    //   }
+    //  }).catch(function (res) {
+    //    console.log(res);
+    //  });
     // setToken(getByKey('token'));
     console.log('page loaded')
   }, [])

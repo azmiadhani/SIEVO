@@ -12,8 +12,7 @@ const Splash = ({navigation}) => {
           // Jika token ada
           navigation.replace('MainApp')
         }else{
-          // Jika token tidak
-          navigation.replace('Login');
+          navigation.replace('Login')
         }
        }).catch(function (res) {
          console.log(res);

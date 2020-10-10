@@ -1,7 +1,10 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-const Akun = () => {
+const Akun = (props) => {
+  useEffect(() => {
+    console.log('akun loaded');
+  }, [])
   return (
     <View>
       <Text>Akun</Text>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -26,17 +26,26 @@ const Router = () => {
         component={MainApp}
         options={{headerShown: false}}
       />
+       <Stack.Screen
+        name="Timeline"
+        component={Timeline}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };
 
-const MainApp = () => {
+const MainApp = ({navigation}) => {
+  useEffect(() => {
+    // navigation.replace('')
+    console.log('mainapp loaded');
+  }, [])
   return (
     <Tab.Navigator tabBar={(props) => <BottomNavigation {...props} />}>
       <Tab.Screen name="Beranda" component={Beranda} />
       <Tab.Screen name="Timeline" component={Timeline} />
       <Tab.Screen name="Pemilihan" component={Pemilihan} />
-      <Tab.Screen name="Akun" component={Akun} />
+      <Tab.Screen name="Akun" component={Akun} navigation={navigation} />
     </Tab.Navigator>
   );
 };
