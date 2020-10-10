@@ -14,8 +14,9 @@ import {
   FilledTextField,
   OutlinedTextField,
 } from '@ubaids/react-native-material-textfield';
-import {HInput, HButton} from '../../components';
+import {HInput, HButton, AsyncTest} from '../../components';
 import {URL_API_LOGIN} from '../../Utils/constant';
+import {storeData,getByKey,removeAllData,getAllKeys,} from '../../Utils/asyncstorage';
 import jwt_decode from "jwt-decode";
 
 function ajax(url, pkg) {
@@ -42,7 +43,19 @@ const LoginModal = () => {
   const [data, setData] = useState([]);
   const [text, setText] = useState('');
   const [token, setToken] = useState('');
-
+  useEffect(() => {
+    // setToken(getByKey('token'));
+    getByKey('token').then(function (res) {
+      if(res){
+       console.log('kunci ada!',res.data.username)
+      }else{
+       console.log('kunci tidak ada!')
+      }
+     }).catch(function (res) {
+       console.log(res);
+     });
+    console.log('page loaded')
+  }, [token])
   return (
     <View style={styles.container}>
       <HInput
@@ -57,9 +70,11 @@ const LoginModal = () => {
         secureTextEntry={true}
       />
       <View style={styles.tombolContainer}>
+        <AsyncTest/>
         <HButton
           label="Login"
           onPress={() => {
+            removeAllData()
             ajax(URL_API_LOGIN + 'api/v1/auth', {
               username: user,
               password: pass,
@@ -68,6 +83,7 @@ const LoginModal = () => {
                 res = JSON.parse(res);
                 console.log(res);
                 if (res.token) {
+                  storeData('token', JSON.stringify(token));
                   setToken(jwt_decode(res.token));
                   console.log(token)
                 }
