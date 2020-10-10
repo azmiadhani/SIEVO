@@ -16,6 +16,7 @@
     "@react-navigation/stack": "^5.9.0",
     "@softmedialab/react-native-material-textfield": "^0.16.21",
     "@ubaids/react-native-material-textfield": "^0.16.3",
+    "jwt-decode": "^3.0.0",
     "react": "16.13.1",
     "react-native": "0.63.2",
     "react-native-gesture-handler": "^1.8.0",
