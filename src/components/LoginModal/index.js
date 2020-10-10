@@ -16,8 +16,13 @@ import {
 } from '@ubaids/react-native-material-textfield';
 import {HInput, HButton, AsyncTest} from '../../components';
 import {URL_API_LOGIN} from '../../Utils/constant';
-import {storeData,getByKey,removeAllData,getAllKeys,} from '../../Utils/asyncstorage';
-import jwt_decode from "jwt-decode";
+import {
+  storeData,
+  getByKey,
+  removeAllData,
+  getAllKeys,
+} from '../../Utils/asyncstorage';
+import jwt_decode from 'jwt-decode';
 
 function ajax(url, pkg) {
   // resource : https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
@@ -44,16 +49,18 @@ const LoginModal = (props) => {
   const [text, setText] = useState('');
   const [token, setToken] = useState('');
   useEffect(() => {
-    getByKey('token').then(function (res) {
-      if(res){
-        props.navigation.replace('MainApp')
-      }else{
-       console.log('kunci tidak ada!')
-      }
-     }).catch(function (res) {
-       console.log(res);
-     });
-  }, [token])
+    getByKey('token')
+      .then(function (res) {
+        if (res.data.username) {
+          props.navigation.replace('MainApp');
+        } else {
+          console.log('kunci tidak ada!');
+        }
+      })
+      .catch(function (res) {
+        console.log(res);
+      });
+  }, [token]);
   return (
     <View style={styles.container}>
       <HInput
@@ -68,11 +75,11 @@ const LoginModal = (props) => {
         secureTextEntry={true}
       />
       <View style={styles.tombolContainer}>
-        <AsyncTest/>
+        {/* <AsyncTest /> */}
         <HButton
           label="Login"
           onPress={() => {
-            removeAllData()
+            removeAllData();
             ajax(URL_API_LOGIN + 'api/v1/auth', {
               username: user,
               password: pass,
@@ -81,9 +88,9 @@ const LoginModal = (props) => {
                 res = JSON.parse(res);
                 console.log(res);
                 if (res.token) {
-                  storeData('token', res.token)
+                  storeData('token', res.token);
                   setToken(res.token);
-                  console.log(token)
+                  console.log(token);
                 }
               })
               .catch(function (res) {
@@ -92,7 +99,7 @@ const LoginModal = (props) => {
           }}
         />
       </View>
-      <HInput
+      {/* <HInput
         placeholder="Ajax Req"
         defaultValue={text}
         keyboardType="phone-pad"
@@ -100,7 +107,7 @@ const LoginModal = (props) => {
         baseColor="rgba(0,0,0,0.4)"
         fontSize={12}
         style={styles.input}
-      />
+      /> */}
     </View>
   );
 };

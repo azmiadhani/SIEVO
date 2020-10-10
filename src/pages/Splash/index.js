@@ -2,21 +2,28 @@ import React, {useEffect} from 'react';
 import {StyleSheet, Text, View, ImageBackground, Image} from 'react-native';
 import {SplashBackground, Logo} from '../../assets';
 import {APP_VERSION} from '../../Utils/constant';
-import {storeData,getByKey,removeAllData,getAllKeys,} from '../../Utils/asyncstorage';
+import {
+  storeData,
+  getByKey,
+  removeAllData,
+  getAllKeys,
+} from '../../Utils/asyncstorage';
 
 const Splash = ({navigation}) => {
   useEffect(() => {
     setTimeout(() => {
-      getByKey('token').then(function (res) {
-        if(res){
-          // Jika token ada
-          navigation.replace('MainApp')
-        }else{
-          navigation.replace('Login')
-        }
-       }).catch(function (res) {
-         console.log(res);
-       });
+      getByKey('token')
+        .then(function (res) {
+          if (res.data.username) {
+            // Jika token ada
+            navigation.replace('MainApp');
+          } else {
+            navigation.replace('Login');
+          }
+        })
+        .catch(function (res) {
+          console.log(res);
+        });
     }, 3000);
   }, [navigation]);
   return (
