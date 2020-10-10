@@ -13,6 +13,7 @@ const HInput = (props) => {
         tintColor="rgba(0,0,0,0.4)"
         baseColor="rgba(0,0,0,0.4)"
         fontSize={12}
+        lineWidth={1}
         style={styles.input}
         {...props}
       />

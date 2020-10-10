@@ -14,27 +14,20 @@ import {
   FilledTextField,
   OutlinedTextField,
 } from '@ubaids/react-native-material-textfield';
-import {TextInput, Button} from 'react-native-paper';
-import {Ti} from '../../components/';
-
-// import {TextInput} from 'react-native-paper';
-
-// import {username} from '../../Utils/globals';
 import {HInput, HButton} from '../../components';
+import {URL_API_LOGIN} from '../../Utils/constant';
+
 function ajax(url, pkg) {
   // resource : https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
   // `delay` returns a promise
   return new Promise(function (resolve, reject) {
     // Only `delay` is able to resolve or reject the promise
-    const fd = new FormData();
     console.log(pkg);
-    fd.append('operation', pkg['operation']);
-    fd.append('userUsername', pkg['userUsername']);
-    fd.append('userPassword', pkg['userPassword']);
+
     var xhr = new XMLHttpRequest();
     xhr.open('post', url, true);
-    xhr.setRequestHeader('X-Requested-With', 'xmlhttprequest');
-    xhr.send(fd);
+    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+    xhr.send(JSON.stringify(pkg));
     xhr.onload = function () {
       resolve(this.response);
     };
@@ -42,8 +35,8 @@ function ajax(url, pkg) {
   });
 }
 const LoginModal = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [user, setUsername] = useState('');
+  const [pass, setPassword] = useState('');
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [text, setText] = useState('');
@@ -52,27 +45,22 @@ const LoginModal = () => {
     <View style={styles.container}>
       <HInput
         label="Nomor Induk Mahasiswa"
-        defaultValue={username}
+        defaultValue={user}
         onChangeText={(text) => setUsername(text)}
       />
-      <TextField
+      <HInput
         label="Kata Sandi"
-        value={password}
+        value={pass}
         onChangeText={(text) => setPassword(text)}
         secureTextEntry={true}
-        tintColor="rgba(0,0,0,0.4)"
-        baseColor="rgba(0,0,0,0.4)"
-        fontSize={12}
-        style={styles.input}
       />
       <View style={styles.tombolContainer}>
         <HButton
           label="Login"
           onPress={() => {
-            ajax('http://192.168.56.1/pemilu-m/mobile/api', {
-              operation: 'login',
-              userUsername: username,
-              userPassword: password,
+            ajax(URL_API_LOGIN + 'api/v1/auth', {
+              username: user,
+              password: pass,
             })
               .then(function (res) {
                 res = JSON.parse(res);
