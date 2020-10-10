@@ -1,5 +1,12 @@
 import React from 'react';
-import {StyleSheet, Text, View, Dimensions,SafeAreaView,ScrollView} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  SafeAreaView,
+  ScrollView,
+} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 const Beranda = () => {
@@ -8,7 +15,11 @@ const Beranda = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>Beranda</Text>
       </View>
-      <ScrollView style={styles.scrollView}>
+      <ScrollView style={styles.scrollView} contentContainerStyle={styles.body}>
+        <Text style={styles.bodyText}>Berita</Text>
+        <Text style={styles.bodyText}>Berita</Text>
+        <Text style={styles.bodyText}>Berita</Text>
+        <Text style={styles.bodyText}>Berita</Text>
         <Text style={styles.bodyText}>Berita</Text>
         <Text style={styles.bodyText}>Berita</Text>
         <Text style={styles.bodyText}>Berita</Text>
@@ -57,11 +68,11 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontFamily: 'CabinCondensed-Bold',
   },
+  scrollView: {
+    height: windowHeight * 0.75,
+  },
   body: {
     width: windowWidth,
-    height: windowHeight * 0.63,
-    paddingHorizontal: 0,
-    paddingTop: 50,
     alignItems: 'center',
     backgroundColor: 'rgba(52, 52, 52, 0)',
   },

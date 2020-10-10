@@ -1,5 +1,11 @@
 import React from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
 import TabItem from '../TabItem';
 
 const BottomNavigator = ({state, descriptors, navigation}) => {
@@ -56,11 +62,13 @@ const BottomNavigator = ({state, descriptors, navigation}) => {
 };
 
 export default BottomNavigator;
-
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     backgroundColor: '#000000',
+    height: windowHeight * 0.1,
     justifyContent: 'space-between',
     paddingHorizontal: 40,
     paddingVertical: 15,
