@@ -16,6 +16,7 @@ import {
 } from '@ubaids/react-native-material-textfield';
 import {HInput, HButton} from '../../components';
 import {URL_API_LOGIN} from '../../Utils/constant';
+import jwt_decode from "jwt-decode";
 
 function ajax(url, pkg) {
   // resource : https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
@@ -35,11 +36,12 @@ function ajax(url, pkg) {
   });
 }
 const LoginModal = () => {
-  const [user, setUsername] = useState('');
-  const [pass, setPassword] = useState('');
+  const [user, setUsername] = useState('1611016110005');
+  const [pass, setPassword] = useState('jakarta12');
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [text, setText] = useState('');
+  const [token, setToken] = useState('');
 
   return (
     <View style={styles.container}>
@@ -64,13 +66,11 @@ const LoginModal = () => {
             })
               .then(function (res) {
                 res = JSON.parse(res);
-                if (res.status == true) {
-                  setText(res.data.token);
-                } else {
-                  setText('Not found!');
-                }
                 console.log(res);
-                // console.log(username);
+                if (res.token) {
+                  setToken(jwt_decode(res.token));
+                  console.log(token)
+                }
               })
               .catch(function (res) {
                 console.log(res);
