@@ -64,7 +64,7 @@ const Akun = (props) => {
           }
           console.log(res.data);
         } else {
-          console.log(redirect);
+          console.log(refresh);
           props.navigation.replace('Login');
         }
       })
