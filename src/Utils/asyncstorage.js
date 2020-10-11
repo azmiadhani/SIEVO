@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import jwt_decode from 'jwt-decode';
-import {useNavigation} from '@react-navigation/native';
 export const storeData = async (key, value) => {
   try {
     await AsyncStorage.setItem(key, value);

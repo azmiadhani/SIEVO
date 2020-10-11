@@ -1,8 +1,26 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, Button} from 'react-native';
-import {createStackNavigator} from '@react-navigation/stack';
+import {checkLogin} from '../../Utils/asyncstorage';
+import {useNavigation} from '@react-navigation/native';
 
-const Timeline = () => {
+const Timeline = ({route}) => {
+  const navigation = useNavigation();
+  useEffect(() => {
+    if (route.params?.loaded) {
+      console.log('TAB - Beranda');
+      checkLogin()
+        .then(function (res) {
+          if (res) {
+            console.log('Masih Login.');
+          } else {
+            navigation.replace('Login');
+          }
+        })
+        .catch(function (res) {
+          console.log(res);
+        });
+    }
+  }, [route.params?.loaded]);
   const [count, setCount] = useState(1);
   const [data, setData] = useState('Initial Data');
   useEffect(() => {
