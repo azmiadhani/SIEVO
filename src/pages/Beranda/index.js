@@ -4,7 +4,7 @@ import {MainContent} from '../../components';
 const Beranda = () => {
   return (
     <View>
-      <MainContent>
+      <MainContent headerText="Beranda">
         <Text style={styles.bodyText}>Berita</Text>
         <Text style={styles.bodyText}>Berita</Text>
         <Text style={styles.bodyText}>Berita</Text>

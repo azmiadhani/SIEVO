@@ -10,7 +10,12 @@ import {
 } from 'react-native';
 import {SplashBackground, Logo, MainLogo, LogoKPUBawaslu} from '../../assets';
 import {LoginModal} from '../../components/';
-import {storeData,getByKey,removeAllData,getAllKeys,} from '../../Utils/asyncstorage';
+import {
+  storeData,
+  getByKey,
+  removeAllData,
+  getAllKeys,
+} from '../../Utils/asyncstorage';
 const Login = ({navigation}) => {
   useEffect(() => {
     // getByKey('token').then(function (res) {
@@ -22,8 +27,8 @@ const Login = ({navigation}) => {
     //    console.log(res);
     //  });
     // setToken(getByKey('token'));
-    console.log('page loaded')
-  }, [])
+    console.log('page loaded');
+  }, []);
   return (
     <SafeAreaView style={styles.background}>
       <ScrollView style={styles.scrollView}>

@@ -22,7 +22,7 @@ const MainContent = (props) => {
       <View style={styles.header}>
         <Image source={LogoULM} style={styles.headerLogo} />
         <View style={{paddingBottom: 10}}></View>
-        <Text style={styles.headerText}>Beranda</Text>
+        <Text style={styles.headerText}>{props.headerText}</Text>
       </View>
 
       <SafeAreaView style={styles.background}>
@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
     height: windowHeight * 0.63,
   },
   body: {
-    width: windowWidth,
-    alignItems: 'center',
+    // width: windowWidth,
+    // alignItems: 'center',
     backgroundColor: 'rgba(52, 52, 52, 0)',
   },
   // Body End
