@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, Button} from 'react-native';
+import {MainContent} from '../../components';
 import {checkLogin} from '../../Utils/asyncstorage';
 import {useNavigation} from '@react-navigation/native';
 
@@ -21,25 +22,10 @@ const Timeline = ({route}) => {
         });
     }
   }, [route.params?.loaded]);
-  const [count, setCount] = useState(1);
-  const [data, setData] = useState('Initial Data');
-  useEffect(() => {
-    console.warn('test use effect', count);
-    if (count == 5) {
-      setData('finish');
-    }
-  });
+
   return (
     <View>
-      <Text>{count}</Text>
-      <Text>{data}</Text>
-      <Button
-        title="update"
-        onPress={() => {
-          setCount(count + 1);
-        }}
-      />
-      <Text>Timeline</Text>
+      <MainContent headerText="Timeline"></MainContent>
     </View>
   );
 };
