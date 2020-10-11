@@ -14,7 +14,8 @@ const Splash = ({navigation}) => {
     setTimeout(() => {
       getByKey('token')
         .then(function (res) {
-          if (res.data.username) {
+          // console.log(res);
+          if (res) {
             // Jika token ada
             navigation.replace('MainApp');
           } else {

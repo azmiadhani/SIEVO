@@ -7,15 +7,36 @@ import {
   removeAllData,
   getAllKeys,
 } from '../../Utils/asyncstorage';
-
+import {URL_API_MAINAPP} from '../../Utils/constant';
+import jwt_decode from 'jwt-decode';
+function ajax(url, pkg) {
+  // resource : https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
+  // `delay` returns a promise
+  return new Promise(function (resolve, reject) {
+    // Only `delay` is able to resolve or reject the promise
+    // console.log(pkg);
+    // pkg = new FormData(pkg);
+    var xhr = new XMLHttpRequest();
+    xhr.open('post', url, true);
+    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+    xhr.send(JSON.stringify(pkg));
+    xhr.onload = function () {
+      resolve(this.response);
+    };
+    xhr.onerror = reject;
+  });
+}
 const Akun = () => {
   const [nim, setNim] = useState('-');
   const [nama, setNama] = useState('-');
   const [prodi, setProdi] = useState('-');
   const [fak, setFak] = useState('-');
+  const [response, setResponse] = useState('-');
   useEffect(() => {
-    getByKey('token')
+    getByKey('token', false)
       .then(function (res) {
+        let res_enc = res;
+        res = jwt_decode(res);
         if (res.data.username) {
           if (res.data.username) {
             setNim(res.data.username);
@@ -24,7 +45,20 @@ const Akun = () => {
             setNama(res.data.nama);
           }
           if (res.data.prodi) {
-            setProdi(res.data.prodi);
+            ajax(URL_API_MAINAPP + 'mobile/api/', {
+              operation: 'getProdiFakultas',
+              prodi: res.data.prodi,
+            })
+              .then(function (res2) {
+                setResponse(res2);
+                res2 = JSON.parse(res2);
+                console.log(res2);
+                setProdi(res2.data.prodiNamaResmi);
+                setFak(res2.data.fakNamaResmi);
+              })
+              .catch(function (res2) {
+                console.log(res2);
+              });
           }
           console.log(res.data);
         }
@@ -47,12 +81,13 @@ const Akun = () => {
           <View
             style={{
               width: windowWidth * 0.8,
-              height: windowHeight * 0.7,
+              // height: windowHeight * 0.7,
             }}>
             <HField label="Nomor Induk Mahasiswa" isi={nim} />
             <HField label="Nama" isi={nama} />
             <HField label="Program Studi" isi={prodi} />
             <HField label="Fakultas" isi={fak} />
+            {/* <HField label="Response" isi={response} /> */}
           </View>
         </View>
       </MainContent>

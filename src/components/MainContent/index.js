@@ -68,9 +68,8 @@ const styles = StyleSheet.create({
     height: windowHeight * 0.63,
   },
   body: {
-    // width: windowWidth,
-    // alignItems: 'center',
-    backgroundColor: 'rgba(52, 52, 52, 0)',
+    // flexGrow: 1,
+    // paddingBottom: 20,
   },
   // Body End
   // Footer

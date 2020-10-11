@@ -51,7 +51,7 @@ const LoginModal = (props) => {
   useEffect(() => {
     getByKey('token')
       .then(function (res) {
-        if (res.data.username) {
+        if (res) {
           props.navigation.replace('MainApp');
         } else {
           console.log('kunci tidak ada!');
@@ -86,11 +86,11 @@ const LoginModal = (props) => {
             })
               .then(function (res) {
                 res = JSON.parse(res);
-                console.log(res);
+                // console.log(res);
                 if (res.token) {
                   storeData('token', res.token);
                   setToken(res.token);
-                  console.log(token);
+                  console.log(res.token);
                 }
               })
               .catch(function (res) {
