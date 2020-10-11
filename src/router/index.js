@@ -41,8 +41,11 @@ const MainApp = ({navigation}) => {
     console.log('mainapp loaded');
   }, []);
   return (
-    <Tab.Navigator tabBar={(props) => <BottomNavigation {...props} />}>
-      <Tab.Screen name="Beranda" component={Beranda} />
+    <Tab.Navigator
+      tabBar={(props) => (
+        <BottomNavigation navigation={navigation} {...props} />
+      )}>
+      <Tab.Screen name="Beranda" component={Beranda} navigation={navigation} />
       <Tab.Screen name="Timeline" component={Timeline} />
       <Tab.Screen name="Pemilihan" component={Pemilihan} />
       <Tab.Screen name="Akun" component={Akun} navigation={navigation} />

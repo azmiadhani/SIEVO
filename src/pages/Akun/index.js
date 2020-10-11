@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, Dimensions} from 'react-native';
-import {MainContent, HField} from '../../components';
+import {MainContent, HField, HButton} from '../../components';
 import {
   storeData,
   getByKey,
@@ -26,18 +26,20 @@ function ajax(url, pkg) {
     xhr.onerror = reject;
   });
 }
-const Akun = () => {
+const Akun = (props) => {
   const [nim, setNim] = useState('-');
   const [nama, setNama] = useState('-');
   const [prodi, setProdi] = useState('-');
   const [fak, setFak] = useState('-');
   const [response, setResponse] = useState('-');
+  const [refresh, setRefresh] = useState(0);
   useEffect(() => {
     getByKey('token', false)
       .then(function (res) {
-        let res_enc = res;
-        res = jwt_decode(res);
-        if (res.data.username) {
+        console.log(res);
+        if (res) {
+          let res_enc = res;
+          res = jwt_decode(res);
           if (res.data.username) {
             setNim(res.data.username);
           }
@@ -61,13 +63,16 @@ const Akun = () => {
               });
           }
           console.log(res.data);
+        } else {
+          console.log(redirect);
+          props.navigation.replace('Login');
         }
       })
       .catch(function (res) {
         console.log(res);
       });
     console.log('akun loaded');
-  }, []);
+  }, [refresh]);
   return (
     <View>
       <MainContent headerText="Profil Pemilih">
@@ -87,6 +92,17 @@ const Akun = () => {
             <HField label="Nama" isi={nama} />
             <HField label="Program Studi" isi={prodi} />
             <HField label="Fakultas" isi={fak} />
+            <View style={{paddingTop: 10}}>
+              <HButton
+                label="Logout"
+                onPress={() => {
+                  removeAllData().then(function () {
+                    setRefresh(Math.random());
+                  });
+                  // console.log(refresh);
+                }}
+              />
+            </View>
             {/* <HField label="Response" isi={response} /> */}
           </View>
         </View>
