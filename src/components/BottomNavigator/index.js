@@ -36,7 +36,9 @@ const BottomNavigator = ({state, descriptors, navigation}) => {
           });
 
           if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name);
+            navigation.navigate(route.name, {
+              loaded: Math.random(),
+            });
           }
         };
 

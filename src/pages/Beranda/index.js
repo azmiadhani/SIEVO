@@ -40,6 +40,7 @@ const Beranda = () => {
           <Text style={styles.bodyText}>
             Selamat datang di Aplikasi PEMILU-M ULM
           </Text>
+          <AsyncTest />
         </View>
       </MainContent>
     </View>

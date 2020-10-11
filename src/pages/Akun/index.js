@@ -1,14 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, Dimensions} from 'react-native';
-import {MainContent, HField, HButton} from '../../components';
+import {MainContent, HField, HButton, AsyncTest} from '../../components';
 import {
   storeData,
   getByKey,
   removeAllData,
   getAllKeys,
+  checkLogin,
 } from '../../Utils/asyncstorage';
 import {URL_API_MAINAPP} from '../../Utils/constant';
 import jwt_decode from 'jwt-decode';
+import {useNavigation} from '@react-navigation/native';
+
 function ajax(url, pkg) {
   // resource : https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
   // `delay` returns a promise
@@ -26,17 +29,36 @@ function ajax(url, pkg) {
     xhr.onerror = reject;
   });
 }
-const Akun = (props) => {
+const Akun = ({route}) => {
+  const navigation = useNavigation();
   const [nim, setNim] = useState('-');
   const [nama, setNama] = useState('-');
   const [prodi, setProdi] = useState('-');
   const [fak, setFak] = useState('-');
   const [response, setResponse] = useState('-');
-  const [refresh, setRefresh] = useState(0);
+  const [refresh, setRefresh] = useState(route.refresh);
+  // jika ada param refresh
   useEffect(() => {
+    if (route.params?.loaded) {
+      checkLogin()
+        .then(function (res) {
+          if (res) {
+            console.log('Masih Login.');
+          } else {
+            navigation.replace('Login');
+          }
+        })
+        .catch(function (res) {
+          console.log(res);
+        });
+    }
+  }, [route.params?.loaded]);
+
+  useEffect(() => {
+    console.log(route);
     getByKey('token', false)
       .then(function (res) {
-        console.log(res);
+        // console.log(res);
         if (res) {
           let res_enc = res;
           res = jwt_decode(res);
@@ -54,7 +76,7 @@ const Akun = (props) => {
               .then(function (res2) {
                 setResponse(res2);
                 res2 = JSON.parse(res2);
-                console.log(res2);
+                // console.log(res2);
                 setProdi(res2.data.prodiNamaResmi);
                 setFak(res2.data.fakNamaResmi);
               })
@@ -62,10 +84,10 @@ const Akun = (props) => {
                 console.log(res2);
               });
           }
-          console.log(res.data);
+          // console.log(res.data);
         } else {
           console.log(refresh);
-          props.navigation.replace('Login');
+          navigation.replace('Login');
         }
       })
       .catch(function (res) {

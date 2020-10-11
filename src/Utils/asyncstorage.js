@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import jwt_decode from 'jwt-decode';
-
+import {useNavigation} from '@react-navigation/native';
 export const storeData = async (key, value) => {
   try {
     await AsyncStorage.setItem(key, value);
@@ -53,5 +53,24 @@ export const getByKey = (key, decoded = true) => {
     } catch (e) {
       reject(e);
     }
+  });
+};
+
+export const checkLogin = async () => {
+  // const navigation = useNavigation();
+  return new Promise(async function (resolve, reject) {
+    getByKey('token', false)
+      .then(function (res) {
+        if (res) {
+          console.log('ada');
+          resolve(true);
+        } else {
+          console.log('tidak ada');
+          resolve(false);
+        }
+      })
+      .catch(function (res) {
+        console.log(res);
+      });
   });
 };
