@@ -57,15 +57,12 @@ export const getByKey = (key, decoded = true) => {
 };
 
 export const checkLogin = async () => {
-  // const navigation = useNavigation();
   return new Promise(async function (resolve, reject) {
     getByKey('token', false)
       .then(function (res) {
         if (res) {
-          console.log('ada');
           resolve(true);
         } else {
-          console.log('tidak ada');
           resolve(false);
         }
       })

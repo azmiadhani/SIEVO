@@ -36,10 +36,11 @@ const Akun = ({route}) => {
   const [prodi, setProdi] = useState('-');
   const [fak, setFak] = useState('-');
   const [response, setResponse] = useState('-');
-  const [refresh, setRefresh] = useState(route.refresh);
+  const [refresh, setRefresh] = useState('');
   // jika ada param refresh
   useEffect(() => {
     if (route.params?.loaded) {
+      console.log('TAB - Akun');
       checkLogin()
         .then(function (res) {
           if (res) {
@@ -93,7 +94,7 @@ const Akun = ({route}) => {
       .catch(function (res) {
         console.log(res);
       });
-    console.log('akun loaded');
+    // console.log('akun loaded');
   }, [refresh]);
   return (
     <View>

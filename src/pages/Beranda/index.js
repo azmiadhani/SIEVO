@@ -3,10 +3,28 @@ import {StyleSheet, Text, View, Image, Dimensions} from 'react-native';
 import {MainContent} from '../../components';
 import {HInput, HButton, AsyncTest} from '../../components';
 import {RaiseHand} from '../../assets';
-import {getByKey} from '../../Utils/asyncstorage';
+import {getByKey, checkLogin} from '../../Utils/asyncstorage';
 import jwt_decode from 'jwt-decode';
-const Beranda = () => {
+import {useNavigation} from '@react-navigation/native';
+const Beranda = ({route}) => {
+  const navigation = useNavigation();
   const [nama, setNama] = useState('');
+  useEffect(() => {
+    if (route.params?.loaded) {
+      console.log('TAB - Beranda');
+      checkLogin()
+        .then(function (res) {
+          if (res) {
+            console.log('Masih Login.');
+          } else {
+            navigation.replace('Login');
+          }
+        })
+        .catch(function (res) {
+          console.log(res);
+        });
+    }
+  }, [route.params?.loaded]);
   useEffect(() => {
     getByKey('token', false)
       .then(function (res) {
@@ -21,7 +39,6 @@ const Beranda = () => {
       .catch(function (res) {
         console.log(res);
       });
-    console.log('akun loaded');
   }, []);
   return (
     <View>
