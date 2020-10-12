@@ -82,6 +82,7 @@ const Akun = ({route}) => {
                 setFak(res2.data.fakNamaResmi);
               })
               .catch(function (res2) {
+                console.log('rusak');
                 console.log(res2);
               });
           }
@@ -111,6 +112,7 @@ const Akun = ({route}) => {
               width: windowWidth * 0.8,
               // height: windowHeight * 0.7,
             }}>
+            <AsyncTest />
             <HField label="Nomor Induk Mahasiswa" isi={nim} />
             <HField label="Nama" isi={nama} />
             <HField label="Program Studi" isi={prodi} />
