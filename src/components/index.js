@@ -6,6 +6,7 @@ import HButton from './HButton';
 import HField from './HField';
 import AsyncTest from './AsyncTest';
 import MainContent from './MainContent';
+import Kandidat from './Kandidat';
 
 export {
   BottomNavigator,
@@ -16,4 +17,5 @@ export {
   HField,
   AsyncTest,
   MainContent,
+  Kandidat,
 };

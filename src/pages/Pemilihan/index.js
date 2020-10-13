@@ -18,6 +18,7 @@ import {
   HButton,
   HInput,
   AsyncTest,
+  Kandidat,
 } from '../../components';
 import {ScrollView} from 'react-native-gesture-handler';
 
@@ -27,6 +28,7 @@ const Pemilihan = ({route}) => {
   const [picture, setPicture] = useState([]);
 
   // component
+  const [step, setStep] = useState(1);
   const [ElCamera, setElCamera] = useState(<View></View>);
   const [ActionButton, setActionButton] = useState(<View></View>);
 
@@ -51,6 +53,10 @@ const Pemilihan = ({route}) => {
         setActionButton(
           <HButton
             label="LANJUTKAN KE PEMILIHAN"
+            onPress={() => {
+              setStep(2);
+              setElCamera(<View></View>);
+            }}
             // console.log(refresh);
           />,
         );
@@ -60,6 +66,28 @@ const Pemilihan = ({route}) => {
       showActionButton(1);
     }
   };
+
+  const showActionButton = (show) => {
+    if (show) {
+      setActionButton(
+        <HButton
+          label="AMBIL FOTO"
+          onPress={takePicture.bind(this)}
+          // console.log(refresh);
+        />,
+      );
+    } else {
+      setActionButton(
+        <HButton
+          label="AMBIL FOTO"
+          onPress={takePicture.bind(this)}
+          disabled={true}
+          // console.log(refresh);
+        />,
+      );
+    }
+  };
+
   const showCamera = (props) => {
     console.log(props);
     setElCamera(
@@ -97,28 +125,10 @@ const Pemilihan = ({route}) => {
       />,
     );
   };
-  const showActionButton = (show) => {
-    if (show) {
-      setActionButton(
-        <HButton
-          label="AMBIL FOTO"
-          onPress={takePicture.bind(this)}
-          // console.log(refresh);
-        />,
-      );
-    } else {
-      setActionButton(
-        <HButton
-          label="AMBIL FOTO"
-          onPress={takePicture.bind(this)}
-          disabled={true}
-          // console.log(refresh);
-        />,
-      );
-    }
-  };
+
   useEffect(() => {
     if (route.params?.loaded) {
+      setStep(1);
       showCamera('TRIGGER SHOW CAMERA');
       showActionButton(1);
       console.log('TAB - Pemilihan');
@@ -138,32 +148,47 @@ const Pemilihan = ({route}) => {
   return (
     <View style={styles.container}>
       {ElCamera}
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          backgroundColor: '#ffffff',
-          borderRadius: 15,
-        }}>
-        <ScrollView>
-          <View style={{paddingTop: 40, paddingBottom: 40}}>
-            <View style={{paddingRight: 30, paddingLeft: 30}}>
-              {ActionButton}
-              <Text
-                style={{
-                  fontFamily: 'Cabin-Regular',
-                  fontSize: 24,
-                  textAlign: 'center',
-                  paddingTop: 20,
-                }}>
-                Pastikan Wajah & KTM/Profil SIMARI anda terlihat dengan jelas
-                dan tidak blur agar pihak panitia bisa mem-verifikasi bahwa anda
-                adalah pemilih valid.
-              </Text>
+      {step == 1 && (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            backgroundColor: '#ffffff',
+            borderRadius: 15,
+          }}>
+          <ScrollView>
+            <View style={{paddingTop: 40, paddingBottom: 40}}>
+              <View style={{paddingRight: 30, paddingLeft: 30}}>
+                {ActionButton}
+                <Text
+                  style={{
+                    fontFamily: 'Cabin-Regular',
+                    fontSize: 24,
+                    textAlign: 'center',
+                    paddingTop: 20,
+                  }}>
+                  Pastikan Wajah & KTM/Profil SIMARI anda terlihat dengan jelas
+                  dan tidak blur agar pihak panitia bisa mem-verifikasi bahwa
+                  anda adalah pemilih valid.
+                </Text>
+              </View>
             </View>
-          </View>
-        </ScrollView>
-      </View>
+          </ScrollView>
+        </View>
+      )}
+      {step == 2 && (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            backgroundColor: '#ffffff',
+            borderRadius: 15,
+          }}>
+          <ScrollView>
+            <Text>Step Dua</Text>
+          </ScrollView>
+        </View>
+      )}
     </View>
   );
 };
