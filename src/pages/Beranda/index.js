@@ -12,10 +12,14 @@ const Beranda = ({route}) => {
   useEffect(() => {
     if (route.params?.loaded) {
       console.log('TAB - Beranda');
+      console.log(route.params);
       checkLogin()
         .then(function (res) {
           if (res) {
             console.log('Masih Login.');
+            if (route.params.pemilihanReload) {
+              navigation.navigate('Pemilihan', {loaded: Math.random()});
+            }
           } else {
             navigation.replace('Login');
           }
