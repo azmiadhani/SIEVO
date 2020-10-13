@@ -32,7 +32,6 @@ const Pemilihan = ({route}) => {
 
   const takePicture = async () => {
     showActionButton(0);
-    console.log(camera);
     console.log('picture pressed');
     if (camera) {
       console.log('OK - camera');

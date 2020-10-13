@@ -17,9 +17,6 @@ const Beranda = ({route}) => {
         .then(function (res) {
           if (res) {
             console.log('Masih Login.');
-            if (route.params.pemilihanReload) {
-              navigation.navigate('Pemilihan', {loaded: Math.random()});
-            }
           } else {
             navigation.replace('Login');
           }
