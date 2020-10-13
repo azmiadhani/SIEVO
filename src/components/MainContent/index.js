@@ -18,7 +18,7 @@ import {
 } from '../../assets';
 const MainContent = (props) => {
   return (
-    <>
+    <View style={{height: windowHeight, backgroundColor: 'white'}}>
       <View style={styles.header}>
         <Image source={LogoULM} style={styles.headerLogo} />
         <View style={{paddingBottom: 10}}></View>
@@ -35,7 +35,7 @@ const MainContent = (props) => {
       <View style={styles.footer}>
         <Image source={LogoKPUBawaslu} style={styles.footerLogo} />
       </View>
-    </>
+    </View>
   );
 };
 

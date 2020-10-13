@@ -42,26 +42,24 @@ const Beranda = ({route}) => {
       });
   }, []);
   return (
-    <View>
-      <MainContent headerText="Beranda">
-        {/* <AsyncTest /> */}
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            paddingTop: windowWidth * 0.3,
-          }}>
-          <View>
-            <Image source={RaiseHand} style={styles.headerLogo} />
-          </View>
-          <Text style={styles.bodyText}>Halo{nama ? ', ' + nama : ''}</Text>
-          <Text style={styles.bodyText}>
-            Selamat datang di Aplikasi PEMILU-M ULM
-          </Text>
-          {/* <AsyncTest /> */}
+    <MainContent headerText="Beranda">
+      {/* <AsyncTest /> */}
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingTop: windowWidth * 0.3,
+        }}>
+        <View>
+          <Image source={RaiseHand} style={styles.headerLogo} />
         </View>
-      </MainContent>
-    </View>
+        <Text style={styles.bodyText}>Halo{nama ? ', ' + nama : ''}</Text>
+        <Text style={styles.bodyText}>
+          Selamat datang di Aplikasi PEMILU-M ULM
+        </Text>
+        {/* <AsyncTest /> */}
+      </View>
+    </MainContent>
   );
 };
 
