@@ -19,6 +19,7 @@ import {
   HInput,
   AsyncTest,
   Kandidat,
+  MainContentPemilihan,
 } from '../../components';
 import {ScrollView} from 'react-native-gesture-handler';
 
@@ -28,9 +29,69 @@ const Pemilihan = ({route}) => {
   const [picture, setPicture] = useState([]);
 
   // component
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
   const [ElCamera, setElCamera] = useState(<View></View>);
   const [ActionButton, setActionButton] = useState(<View></View>);
+
+  // Data Kandidat
+  const [dataKandidat, setDataKandidat] = useState([
+    {
+      key: '1',
+      kandidatNomorurut: '1',
+      kandidatPresiden: 'Muhammad Azmi Adhani',
+      kandidatWakilpresiden: 'Ahmad Juhdi',
+      kandidatFoto: 'no.jpg',
+    },
+    {
+      key: '2',
+      kandidatNomorurut: '2',
+      kandidatPresiden: 'Muhammad Bawaihi',
+      kandidatWakilpresiden: 'Muhammad Zaien',
+      kandidatFoto: 'nos.jpg',
+    },
+    {
+      key: '3',
+      kandidatNomorurut: '2',
+      kandidatPresiden: 'Muhammad Bawaihi',
+      kandidatWakilpresiden: 'Muhammad Zaien',
+      kandidatFoto: 'nos.jpg',
+    },
+    {
+      key: '4',
+      kandidatNomorurut: '2',
+      kandidatPresiden: 'Muhammad Bawaihi',
+      kandidatWakilpresiden: 'Muhammad Zaien',
+      kandidatFoto: 'nos.jpg',
+    },
+    {
+      key: '5',
+      kandidatNomorurut: '2',
+      kandidatPresiden: 'Muhammad Bawaihi',
+      kandidatWakilpresiden: 'Muhammad Zaien',
+      kandidatFoto: 'nos.jpg',
+    },
+    {
+      key: '6',
+      kandidatNomorurut: '2',
+      kandidatPresiden: 'Muhammad Bawaihi',
+      kandidatWakilpresiden: 'Muhammad Zaien',
+      kandidatFoto: 'nos.jpg',
+    },
+    {
+      key: '7',
+      kandidatNomorurut: '2',
+      kandidatPresiden: 'Muhammad Bawaihi',
+      kandidatWakilpresiden: 'Muhammad Zaien',
+      kandidatFoto: 'nos.jpg',
+    },
+  ]);
+  const [pilihan, setPilihan] = useState('');
+
+  const pilihKandidat = (key) => {
+    setPilihan(key);
+    console.log('PILIH');
+    console.log(pilihan);
+  };
 
   const takePicture = async () => {
     showActionButton(0);
@@ -128,10 +189,12 @@ const Pemilihan = ({route}) => {
 
   useEffect(() => {
     if (route.params?.loaded) {
-      setStep(1);
-      showCamera('TRIGGER SHOW CAMERA');
-      showActionButton(1);
+      setStep(2);
+      // ENABLE LATER
+      // showCamera('TRIGGER SHOW CAMERA');
+      // showActionButton(1);
       console.log('TAB - Pemilihan');
+      setPilihan('');
       checkLogin()
         .then(function (res) {
           if (res) {
@@ -177,17 +240,13 @@ const Pemilihan = ({route}) => {
         </View>
       )}
       {step == 2 && (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            backgroundColor: '#ffffff',
-            borderRadius: 15,
-          }}>
-          <ScrollView>
-            <Text>Step Dua</Text>
-          </ScrollView>
-        </View>
+        <MainContentPemilihan>
+          <Kandidat
+            dataKandidat={dataKandidat}
+            terpilih={pilihan}
+            onChange={pilihKandidat}
+          />
+        </MainContentPemilihan>
       )}
     </View>
   );
@@ -197,6 +256,14 @@ export default Pemilihan;
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
+  headerLogo: {
+    height: windowHeight * 0.15,
+    resizeMode: 'contain',
+  },
+  bodyText: {
+    fontSize: 16,
+    fontFamily: 'Cabin-Regular',
+  },
   scrollView: {
     height: windowHeight * 0.63,
   },
