@@ -16,9 +16,10 @@ import {
   LogoKPUBawaslu,
   LogoULM,
 } from '../../assets';
+import HButton from '../HButton';
 const MainContent = (props) => {
   return (
-    <View style={{height: windowHeight, backgroundColor: 'white'}}>
+    <View style={{backgroundColor: 'white'}}>
       <SafeAreaView style={[styles.scrollView]}>{props.children}</SafeAreaView>
       <View style={styles.header}>
         <Image source={LogoULM} style={styles.headerLogo} />
@@ -37,17 +38,7 @@ const windowHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   // Header Start
-  header: {
-    width: windowWidth,
-    paddingBottom: 10,
-    paddingTop: windowHeight * 0.03,
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0)',
-  },
-  headerLogo: {
-    height: 25,
-    resizeMode: 'contain',
-  },
+
   headerText: {
     fontSize: 22,
     fontFamily: 'CabinCondensed-Bold',
@@ -55,7 +46,7 @@ const styles = StyleSheet.create({
   // Header End
   //   Body
   scrollView: {
-    height: windowHeight * 0.8,
+    height: windowHeight * 0.65,
     paddingTop: 10,
   },
   body: {
@@ -64,6 +55,17 @@ const styles = StyleSheet.create({
   },
   // Body End
   // Footer
+  header: {
+    width: windowWidth,
+    paddingBottom: windowHeight * 0.01,
+    paddingTop: windowHeight * 0.01,
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+  },
+  headerLogo: {
+    height: windowWidth * 0.05,
+    resizeMode: 'contain',
+  },
   footer: {
     width: windowWidth,
     justifyContent: 'center',
@@ -72,7 +74,7 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   footerLogo: {
-    height: 25,
+    height: windowWidth * 0.05,
     resizeMode: 'contain',
   },
   // Footer End

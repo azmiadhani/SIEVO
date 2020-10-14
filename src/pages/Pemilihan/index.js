@@ -88,6 +88,11 @@ const Pemilihan = ({route}) => {
   ]);
   const [pilihan, setPilihan] = useState('');
 
+  const kirimPilihan = () => {
+    console.log('Kirim Pilihan');
+    console.log(pilihan);
+  };
+
   const pilihKandidat = (key) => {
     setPilihan(key);
     console.log('PILIH');
@@ -240,13 +245,24 @@ const Pemilihan = ({route}) => {
         </View>
       )}
       {step == 2 && (
-        <MainContentPemilihan>
-          <Kandidat
-            dataKandidat={dataKandidat}
-            terpilih={pilihan}
-            onChange={pilihKandidat}
-          />
-        </MainContentPemilihan>
+        <>
+          <View style={{alignItems: 'center', paddingTop: windowWidth * 0.05}}>
+            <View style={styles.realFooter}>
+              <HButton
+                label="SIMPAN PILIHAN"
+                disabled={pilihan ? false : true}
+                onPress={() => kirimPilihan()}
+              />
+            </View>
+          </View>
+          <MainContentPemilihan>
+            <Kandidat
+              dataKandidat={dataKandidat}
+              terpilih={pilihan}
+              onChange={pilihKandidat}
+            />
+          </MainContentPemilihan>
+        </>
       )}
     </View>
   );
@@ -285,5 +301,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     alignSelf: 'center',
     margin: 20,
+  },
+  realFooter: {
+    width: windowWidth * 0.8,
   },
 });
