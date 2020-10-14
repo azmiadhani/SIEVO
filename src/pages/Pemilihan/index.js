@@ -22,6 +22,7 @@ import {
   MainContentPemilihan,
 } from '../../components';
 import {ScrollView} from 'react-native-gesture-handler';
+import {URL_API_MAINAPP, URL_PATH_FOTO_KANDIDAT} from '../../Utils/constant';
 
 const Pemilihan = ({route}) => {
   const navigation = useNavigation();
@@ -40,14 +41,14 @@ const Pemilihan = ({route}) => {
       kandidatNomorurut: '1',
       kandidatPresiden: 'Muhammad Azmi Adhani',
       kandidatWakilpresiden: 'Ahmad Juhdi',
-      kandidatFoto: 'no.jpg',
+      kandidatFoto: 'calon1.png',
     },
     {
       key: '2',
       kandidatNomorurut: '2',
       kandidatPresiden: 'Muhammad Bawaihi',
       kandidatWakilpresiden: 'Muhammad Zaien',
-      kandidatFoto: 'nos.jpg',
+      kandidatFoto: 'calon2.png',
     },
     {
       key: '3',
@@ -90,7 +91,6 @@ const Pemilihan = ({route}) => {
   const pilihKandidat = (key) => {
     setPilihan(key);
     console.log('PILIH');
-    console.log(pilihan);
   };
 
   const takePicture = async () => {
