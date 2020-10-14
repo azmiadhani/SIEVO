@@ -4,7 +4,9 @@ import {TouchableOpacity, StyleSheet, Text, View} from 'react-native';
 const HButton = (props) => {
   return (
     <View>
-      <TouchableOpacity style={styles.button} {...props}>
+      <TouchableOpacity
+        style={props.disabled ? styles.buttonDisabled : styles.button}
+        {...props}>
         <Text style={styles.text}>{props.label}</Text>
       </TouchableOpacity>
     </View>
@@ -22,6 +24,12 @@ const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     backgroundColor: '#000000',
+    padding: 10,
+    borderRadius: 2,
+  },
+  buttonDisabled: {
+    alignItems: 'center',
+    backgroundColor: '#6e6e6e',
     padding: 10,
     borderRadius: 2,
   },
