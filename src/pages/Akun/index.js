@@ -63,29 +63,10 @@ const Akun = ({route}) => {
         if (res) {
           let res_enc = res;
           res = jwt_decode(res);
-          if (res.data.username) {
-            setNim(res.data.username);
-          }
-          if (res.data.nama) {
-            setNama(res.data.nama);
-          }
-          if (res.data.prodi) {
-            ajax(URL_API_MAINAPP + 'mobile/api/', {
-              operation: 'getProdiFakultas',
-              prodi: res.data.prodi,
-            })
-              .then(function (res2) {
-                setResponse(res2);
-                res2 = JSON.parse(res2);
-                // console.log(res2);
-                setProdi(res2.data.prodiNamaResmi);
-                setFak(res2.data.fakNamaResmi);
-              })
-              .catch(function (res2) {
-                console.log('rusak');
-                console.log(res2);
-              });
-          }
+          res.data.username ? setNim(res.data.username) : setNim('');
+          res.data.nama ? setNama(res.data.nama) : setNama('');
+          res.data.prodiNama ? setProdi(res.data.prodiNama) : setProdi('');
+          res.data.fakultasNama ? setFak(res.data.fakultasNama) : setFak('');
           // console.log(res.data);
         } else {
           console.log(refresh);
