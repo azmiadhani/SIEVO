@@ -76,7 +76,7 @@ const LoginModal = (props) => {
       />
       <View style={styles.tombolContainer}>
         {/* <AsyncTest /> */}
-        <AsyncTest />
+        {/* <AsyncTest /> */}
         <HButton
           label="Login"
           onPress={() => {
