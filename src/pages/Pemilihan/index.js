@@ -230,14 +230,15 @@ const Pemilihan = ({route}) => {
             backgroundColor: '#ffffff',
             borderRadius: 15,
           }}>
-          <ScrollView>
-            <View style={{paddingTop: 40, paddingBottom: 40}}>
-              <View style={{paddingRight: 30, paddingLeft: 30}}>
+          <View style={{paddingTop: 40}}>
+            <ScrollView>
+              <View
+                style={{paddingRight: 30, paddingLeft: 30, paddingBottom: 40}}>
                 {ActionButton}
                 <Text
                   style={{
                     fontFamily: 'Cabin-Regular',
-                    fontSize: 24,
+                    fontSize: 14,
                     textAlign: 'center',
                     paddingTop: 20,
                   }}>
@@ -246,8 +247,8 @@ const Pemilihan = ({route}) => {
                   anda adalah pemilih valid.
                 </Text>
               </View>
-            </View>
-          </ScrollView>
+            </ScrollView>
+          </View>
         </View>
       )}
       {step == 2 && (
