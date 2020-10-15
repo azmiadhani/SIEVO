@@ -60,7 +60,7 @@ export const checkLogin = async () => {
     getByKey('token', false)
       .then(function (res) {
         if (res) {
-          resolve(true);
+          resolve(res);
         } else {
           resolve(false);
         }

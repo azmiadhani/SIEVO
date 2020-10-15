@@ -9,7 +9,7 @@ import {
   ImageBackground,
   Image,
 } from 'react-native';
-import {checkLogin} from '../../Utils/asyncstorage';
+import {checkLogin, getByKey} from '../../Utils/asyncstorage';
 import {useNavigation} from '@react-navigation/native';
 import {RNCamera} from 'react-native-camera';
 import {
@@ -35,57 +35,7 @@ const Pemilihan = ({route}) => {
   const [ActionButton, setActionButton] = useState(<View></View>);
 
   // Data Kandidat
-  const [dataKandidat, setDataKandidat] = useState([
-    {
-      key: '1',
-      kandidatNomorurut: '1',
-      kandidatPresiden: 'Muhammad Azmi Adhani',
-      kandidatWakilpresiden: 'Ahmad Juhdi',
-      kandidatFoto: 'calon1.png',
-    },
-    {
-      key: '2',
-      kandidatNomorurut: '2',
-      kandidatPresiden: 'Muhammad Bawaihi',
-      kandidatWakilpresiden: 'Muhammad Zaien',
-      kandidatFoto: 'calon2.png',
-    },
-    {
-      key: '3',
-      kandidatNomorurut: '2',
-      kandidatPresiden: 'Muhammad Bawaihi',
-      kandidatWakilpresiden: 'Muhammad Zaien',
-      kandidatFoto: 'nos.jpg',
-    },
-    {
-      key: '4',
-      kandidatNomorurut: '2',
-      kandidatPresiden: 'Muhammad Bawaihi',
-      kandidatWakilpresiden: 'Muhammad Zaien',
-      kandidatFoto: 'nos.jpg',
-    },
-    {
-      key: '5',
-      kandidatNomorurut: '2',
-      kandidatPresiden: 'Muhammad Bawaihi',
-      kandidatWakilpresiden: 'Muhammad Zaien',
-      kandidatFoto: 'nos.jpg',
-    },
-    {
-      key: '6',
-      kandidatNomorurut: '2',
-      kandidatPresiden: 'Muhammad Bawaihi',
-      kandidatWakilpresiden: 'Muhammad Zaien',
-      kandidatFoto: 'nos.jpg',
-    },
-    {
-      key: '7',
-      kandidatNomorurut: '2',
-      kandidatPresiden: 'Muhammad Bawaihi',
-      kandidatWakilpresiden: 'Muhammad Zaien',
-      kandidatFoto: 'nos.jpg',
-    },
-  ]);
+  const [dataKandidat, setDataKandidat] = useState([]);
   const [pilihan, setPilihan] = useState('');
 
   const kirimPilihan = () => {
@@ -192,6 +142,24 @@ const Pemilihan = ({route}) => {
     );
   };
 
+  function ajax(url, pkg) {
+    // resource : https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
+    // `delay` returns a promise
+    return new Promise(function (resolve, reject) {
+      // Only `delay` is able to resolve or reject the promise
+      console.log(pkg);
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('post', url, true);
+      xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+      xhr.send(JSON.stringify(pkg));
+      xhr.onload = function () {
+        resolve(this.response);
+      };
+      xhr.onerror = reject;
+    });
+  }
+
   useEffect(() => {
     if (route.params?.loaded) {
       setStep(2);
@@ -200,10 +168,29 @@ const Pemilihan = ({route}) => {
       // showActionButton(1);
       console.log('TAB - Pemilihan');
       setPilihan('');
-      checkLogin()
+      setDataKandidat([]);
+      getByKey('token', false)
         .then(function (res) {
           if (res) {
             console.log('Masih Login.');
+            ajax(URL_API_MAINAPP + 'mobile/api/', {
+              operation: 'getKandidat',
+              token: res,
+            })
+              .then(function (res2) {
+                res2 = JSON.parse(res2);
+                // console.log(res);
+                if (res2.listKandidat) {
+                  console.log('Kandidat Loaded');
+                  setDataKandidat(res2.listKandidat);
+                } else {
+                  // Tidak ada Kandidat
+                  console.log('Tidak ada kandidat');
+                }
+              })
+              .catch(function (res) {
+                console.log(res);
+              });
           } else {
             navigation.replace('Login');
           }

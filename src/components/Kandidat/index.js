@@ -25,13 +25,15 @@ const Kandidat = (props) => {
           <TouchableOpacity
             style={[
               styles.innerBox,
-              props.terpilih == item.key ? {backgroundColor: '#9fff9c'} : {},
+              props.terpilih == item.kandidatId
+                ? {backgroundColor: '#9fff9c'}
+                : {},
             ]}
-            value={item.key}
-            onPress={() => props.onChange(item.key)}>
+            value={item.kandidatId}
+            onPress={() => props.onChange(item.kandidatId)}>
             <View style={styles.textContainer}>
               <Text style={[styles.item, styles.itemBold, {fontSize: 50}]}>
-                {item.key}
+                {item.kandidatNomorurut}
               </Text>
             </View>
             <View style={[styles.textContainer]}>
@@ -54,7 +56,7 @@ const Kandidat = (props) => {
             </View>
           </TouchableOpacity>
         )}
-        keyExtractor={(item) => item.key}
+        keyExtractor={(item) => item.kandidatId}
       />
     </View>
   );
