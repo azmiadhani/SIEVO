@@ -15,7 +15,7 @@ import {
   OutlinedTextField,
 } from '@ubaids/react-native-material-textfield';
 import {HInput, HButton, AsyncTest} from '../../components';
-import {URL_API_LOGIN} from '../../Utils/constant';
+import {URL_API_LOGIN, URL_API_MAINAPP} from '../../Utils/constant';
 import {
   storeData,
   getByKey,
@@ -76,6 +76,7 @@ const LoginModal = (props) => {
       />
       <View style={styles.tombolContainer}>
         {/* <AsyncTest /> */}
+        <AsyncTest />
         <HButton
           label="Login"
           onPress={() => {
@@ -88,9 +89,15 @@ const LoginModal = (props) => {
                 res = JSON.parse(res);
                 // console.log(res);
                 if (res.token) {
-                  storeData('token', res.token);
-                  setToken(res.token);
-                  console.log(res.token);
+                  ajax(URL_API_MAINAPP + 'mobile/api/', {
+                    token: res.token,
+                    operation: 'login',
+                  }).then(function (res2) {
+                    res2 = JSON.parse(res2);
+                    storeData('token', res2.token);
+                    setToken(res2.token);
+                    console.log(res2.token);
+                  });
                 }
               })
               .catch(function (res) {
