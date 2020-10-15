@@ -23,7 +23,7 @@ import {
 } from '../../components';
 import {ScrollView} from 'react-native-gesture-handler';
 import {URL_API_MAINAPP, URL_PATH_FOTO_KANDIDAT} from '../../Utils/constant';
-
+import axios from 'axios';
 const Pemilihan = ({route}) => {
   const navigation = useNavigation();
   const [camera, setCamera] = useState();
@@ -37,11 +37,7 @@ const Pemilihan = ({route}) => {
   // Data Kandidat
   const [dataKandidat, setDataKandidat] = useState([]);
   const [pilihan, setPilihan] = useState('');
-
-  const kirimPilihan = () => {
-    console.log('Kirim Pilihan');
-    console.log(pilihan);
-  };
+  const [token, setToken] = useState('');
 
   const pilihKandidat = (key) => {
     setPilihan(key);
@@ -53,11 +49,10 @@ const Pemilihan = ({route}) => {
     console.log('picture pressed');
     if (camera) {
       console.log('OK - camera');
-      // const options = {quality: 0.5, base64: true};
-      const options = {quality: 0.5};
+      const options = {quality: 0.2, base64: true, mirrorImage: false};
       const data = await camera.takePictureAsync(options);
       if (data) {
-        setPicture(data.uri);
+        setPicture(data);
         setElCamera(
           <View style={{flex: 2}}>
             <ImageBackground
@@ -160,18 +155,42 @@ const Pemilihan = ({route}) => {
     });
   }
 
+  function submit_ajax(url) {
+    // resource : https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
+    // `delay` returns a promise
+    console.log('submit_ajax');
+
+    return new Promise(function (resolve, reject) {
+      // Only `delay` is able to resolve or reject the promise
+      var fd = new FormData();
+      fd.append('token', token);
+      fd.append('operation', 'submit_pilihan');
+      fd.append('pilihanKandidatid', pilihan);
+      fd.append('pilihanFoto', picture.base64);
+      axios
+        .post(url, fd)
+        .then(function (response) {
+          console.log(response.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    });
+  }
+
   useEffect(() => {
     if (route.params?.loaded) {
-      setStep(2);
+      setStep(1);
       // ENABLE LATER
-      // showCamera('TRIGGER SHOW CAMERA');
-      // showActionButton(1);
+      showCamera('TRIGGER SHOW CAMERA');
+      showActionButton(1);
       console.log('TAB - Pemilihan');
       setPilihan('');
       setDataKandidat([]);
       getByKey('token', false)
         .then(function (res) {
           if (res) {
+            setToken(res);
             console.log('Masih Login.');
             ajax(URL_API_MAINAPP + 'mobile/api/', {
               operation: 'getKandidat',
@@ -238,7 +257,23 @@ const Pemilihan = ({route}) => {
               <HButton
                 label="SIMPAN PILIHAN"
                 disabled={pilihan ? false : true}
-                onPress={() => kirimPilihan()}
+                onPress={() =>
+                  submit_ajax(URL_API_MAINAPP + 'mobile/api_fd/')
+                    .then(function (res2) {
+                      res2 = JSON.parse(res2);
+                      console.log(res2);
+                      // if (res2.listKandidat) {
+                      //   console.log('Kandidat Loaded');
+                      //   setDataKandidat(res2.listKandidat);
+                      // } else {
+                      //   // Tidak ada Kandidat
+                      //   console.log('Tidak ada kandidat');
+                      // }
+                    })
+                    .catch(function (res) {
+                      console.log(res);
+                    })
+                }
               />
             </View>
           </View>
