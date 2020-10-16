@@ -20,13 +20,13 @@ import HButton from '../HButton';
 const MainContent = (props) => {
   return (
     <View style={{backgroundColor: 'white'}}>
-      <SafeAreaView style={[styles.scrollView]}>{props.children}</SafeAreaView>
       <View style={styles.header}>
         <Image source={LogoULM} style={styles.headerLogo} />
       </View>
       <View style={styles.footer}>
         <Image source={LogoKPUBawaslu} style={styles.footerLogo} />
       </View>
+      <SafeAreaView style={[styles.scrollView]}>{props.children}</SafeAreaView>
     </View>
   );
 };

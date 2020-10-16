@@ -23,6 +23,7 @@ const Kandidat = (props) => {
         data={props.dataKandidat}
         renderItem={({item}) => (
           <TouchableOpacity
+            activeOpacity={1}
             style={[
               styles.innerBox,
               props.terpilih == item.kandidatId

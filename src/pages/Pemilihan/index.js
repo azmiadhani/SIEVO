@@ -39,6 +39,9 @@ const Pemilihan = ({route}) => {
   const [pilihan, setPilihan] = useState('');
   const [token, setToken] = useState('');
 
+  // Button Simpan
+  const [simpan, setSimpan] = useState(true);
+
   const pilihKandidat = (key) => {
     setPilihan(key);
     console.log('PILIH');
@@ -170,10 +173,10 @@ const Pemilihan = ({route}) => {
       axios
         .post(url, fd)
         .then(function (response) {
-          console.log(response.data);
+          resolve(response.data);
         })
         .catch(function (error) {
-          console.log(error);
+          reject(error);
         });
     });
   }
@@ -253,15 +256,23 @@ const Pemilihan = ({route}) => {
       )}
       {step == 2 && (
         <>
+          <MainContentPemilihan>
+            <Kandidat
+              dataKandidat={dataKandidat}
+              terpilih={pilihan}
+              onChange={pilihKandidat}
+            />
+          </MainContentPemilihan>
           <View style={{alignItems: 'center', paddingTop: windowWidth * 0.05}}>
             <View style={styles.realFooter}>
               <HButton
                 label="SIMPAN PILIHAN"
-                disabled={pilihan ? false : true}
-                onPress={() =>
+                disabled={pilihan ? (simpan ? false : true) : true}
+                onPress={() => {
+                  setSimpan(false);
                   submit_ajax(URL_API_MAINAPP + 'mobile/api_fd/')
                     .then(function (res2) {
-                      res2 = JSON.parse(res2);
+                      // res2 = JSON.parse(res2);
                       console.log(res2);
                       // if (res2.listKandidat) {
                       //   console.log('Kandidat Loaded');
@@ -270,21 +281,16 @@ const Pemilihan = ({route}) => {
                       //   // Tidak ada Kandidat
                       //   console.log('Tidak ada kandidat');
                       // }
+                      setSimpan(true);
                     })
                     .catch(function (res) {
                       console.log(res);
-                    })
-                }
+                      setSimpan(true);
+                    });
+                }}
               />
             </View>
           </View>
-          <MainContentPemilihan>
-            <Kandidat
-              dataKandidat={dataKandidat}
-              terpilih={pilihan}
-              onChange={pilihKandidat}
-            />
-          </MainContentPemilihan>
         </>
       )}
     </View>
