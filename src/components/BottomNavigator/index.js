@@ -36,8 +36,15 @@ const BottomNavigator = ({state, descriptors, navigation}) => {
           });
 
           if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name, {
-              loaded: Math.random(),
+            navigation.reset({
+              index: 0,
+              routes: [
+                {
+                  name: route.name,
+                  params: {loaded: Math.random(), reset: true},
+                },
+              ],
+              // actions: [navigation.navigate({routeName: 'Pemilihan'})],
             });
           }
         };
