@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   ImageBackground,
   Image,
+  Alert,
 } from 'react-native';
 import {checkLogin, getByKey} from '../../Utils/asyncstorage';
 import {useNavigation} from '@react-navigation/native';
@@ -183,10 +184,10 @@ const Pemilihan = ({route}) => {
 
   useEffect(() => {
     if (route.params?.loaded) {
-      setStep(1);
+      setStep(2);
       // ENABLE LATER
-      showCamera('TRIGGER SHOW CAMERA');
-      showActionButton(1);
+      // showCamera('TRIGGER SHOW CAMERA');
+      // showActionButton(1);
       console.log('TAB - Pemilihan');
       setPilihan('');
       setDataKandidat([]);
@@ -222,6 +223,7 @@ const Pemilihan = ({route}) => {
         });
     }
   }, [route.params?.loaded]);
+
   return (
     <View style={styles.container}>
       {ElCamera}
@@ -270,6 +272,7 @@ const Pemilihan = ({route}) => {
                 disabled={pilihan ? (simpan ? false : true) : true}
                 onPress={() => {
                   setSimpan(false);
+                  createTwoButtonAlert();
                   submit_ajax(URL_API_MAINAPP + 'mobile/api_fd/')
                     .then(function (res2) {
                       // res2 = JSON.parse(res2);
