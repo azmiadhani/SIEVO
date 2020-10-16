@@ -4,6 +4,7 @@ import LoginModal from './LoginModal';
 import HInput from './HInput';
 import HButton from './HButton';
 import HField from './HField';
+import HAlert from './HAlert';
 import AsyncTest from './AsyncTest';
 import MainContent from './MainContent';
 import Kandidat from './Kandidat';
@@ -20,4 +21,5 @@ export {
   MainContent,
   Kandidat,
   MainContentPemilihan,
+  HAlert,
 };

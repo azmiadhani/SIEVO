@@ -11,7 +11,8 @@ import {
   Alert,
 } from 'react-native';
 import {checkLogin, getByKey} from '../../Utils/asyncstorage';
-import {useNavigation} from '@react-navigation/native';
+import {HAlert} from '../../Utils/HAlert';
+import {useNavigation, CommonActions} from '@react-navigation/native';
 import {RNCamera} from 'react-native-camera';
 import {
   MainContent,
@@ -184,6 +185,18 @@ const Pemilihan = ({route}) => {
 
   useEffect(() => {
     if (route.params?.loaded) {
+      if (!route.params.reset) {
+        // navigation.reset({
+        //   index: 0,
+        //   routes: [
+        //     {
+        //       name: 'Pemilihan',
+        //       params: {loaded: Math.random(), reset: true},
+        //     },
+        //   ],
+        //   // actions: [navigation.navigate({routeName: 'Pemilihan'})],
+        // });
+      }
       setStep(2);
       // ENABLE LATER
       // showCamera('TRIGGER SHOW CAMERA');
@@ -223,6 +236,10 @@ const Pemilihan = ({route}) => {
         });
     }
   }, [route.params?.loaded]);
+
+  const sudahMemilih = () => {
+    navigation.navigate;
+  };
 
   return (
     <View style={styles.container}>
@@ -272,18 +289,14 @@ const Pemilihan = ({route}) => {
                 disabled={pilihan ? (simpan ? false : true) : true}
                 onPress={() => {
                   setSimpan(false);
-                  createTwoButtonAlert();
                   submit_ajax(URL_API_MAINAPP + 'mobile/api_fd/')
                     .then(function (res2) {
-                      // res2 = JSON.parse(res2);
                       console.log(res2);
-                      // if (res2.listKandidat) {
-                      //   console.log('Kandidat Loaded');
-                      //   setDataKandidat(res2.listKandidat);
-                      // } else {
-                      //   // Tidak ada Kandidat
-                      //   console.log('Tidak ada kandidat');
-                      // }
+                      if (res2.status) {
+                        HAlert('', res2.keterangan);
+                      } else {
+                        HAlert('Gagal', res2.keterangan);
+                      }
                       setSimpan(true);
                     })
                     .catch(function (res) {
