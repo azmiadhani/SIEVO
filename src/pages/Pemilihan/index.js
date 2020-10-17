@@ -21,7 +21,9 @@ import {
   HInput,
   AsyncTest,
   Kandidat,
+  KandidatBerkala,
   MainContentPemilihan,
+  MainContentBerkala,
 } from '../../components';
 import {ScrollView} from 'react-native-gesture-handler';
 import {URL_API_MAINAPP, URL_PATH_FOTO_KANDIDAT} from '../../Utils/constant';
@@ -338,7 +340,9 @@ const Pemilihan = ({route}) => {
       )}
       {step == 3 && (
         <View>
-          <MainContent headerText="Status Pemilihan"></MainContent>
+          <MainContentBerkala headerText="Status Pemilihan">
+            <KandidatBerkala data={dataBerkala} />
+          </MainContentBerkala>
         </View>
       )}
     </View>

@@ -7,7 +7,9 @@ import HField from './HField';
 import AsyncTest from './AsyncTest';
 import MainContent from './MainContent';
 import Kandidat from './Kandidat';
+import KandidatBerkala from './KandidatBerkala';
 import MainContentPemilihan from './MainContentPemilihan';
+import MainContentBerkala from './MainContentBerkala';
 
 export {
   BottomNavigator,
@@ -19,5 +21,7 @@ export {
   AsyncTest,
   MainContent,
   Kandidat,
+  KandidatBerkala,
   MainContentPemilihan,
+  MainContentBerkala,
 };
