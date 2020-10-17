@@ -43,6 +43,9 @@ const Pemilihan = ({route}) => {
   const [pilihan, setPilihan] = useState('');
   const [token, setToken] = useState('');
 
+  // pilihan berkala
+  const [dataBerkala, setDataBerkala] = useState([]);
+
   // Button Simpan
   const [simpan, setSimpan] = useState(true);
 
@@ -200,30 +203,49 @@ const Pemilihan = ({route}) => {
             var decoded_token = jwt_decode(res);
             if (decoded_token.data.sudah_memilih == true) {
               setStep(3);
+              console.log('Masih Login.');
+              ajax(URL_API_MAINAPP + 'mobile/api/', {
+                operation: 'pilihanBerkala',
+                token: res,
+              })
+                .then(function (res2) {
+                  res2 = JSON.parse(res2);
+                  console.log(res2.listBerkala);
+                  if (res2.listBerkala) {
+                    console.log('List Berkala Updated');
+                    setDataBerkala(res2.listBerkala);
+                  } else {
+                    // Tidak ada Kandidat
+                    console.log('Tidak ada List Berkala');
+                  }
+                })
+                .catch(function (res) {
+                  console.log(res);
+                });
             } else {
               setStep(1);
               showCamera('TRIGGER SHOW CAMERA');
               showActionButton(1);
-            }
-            console.log('Masih Login.');
-            ajax(URL_API_MAINAPP + 'mobile/api/', {
-              operation: 'getKandidat',
-              token: res,
-            })
-              .then(function (res2) {
-                res2 = JSON.parse(res2);
-                // console.log(res);
-                if (res2.listKandidat) {
-                  console.log('Kandidat Loaded');
-                  setDataKandidat(res2.listKandidat);
-                } else {
-                  // Tidak ada Kandidat
-                  console.log('Tidak ada kandidat');
-                }
+              console.log('Masih Login.');
+              ajax(URL_API_MAINAPP + 'mobile/api/', {
+                operation: 'getKandidat',
+                token: res,
               })
-              .catch(function (res) {
-                console.log(res);
-              });
+                .then(function (res2) {
+                  res2 = JSON.parse(res2);
+                  // console.log(res);
+                  if (res2.listKandidat) {
+                    console.log('Kandidat Loaded');
+                    setDataKandidat(res2.listKandidat);
+                  } else {
+                    // Tidak ada Kandidat
+                    console.log('Tidak ada kandidat');
+                  }
+                })
+                .catch(function (res) {
+                  console.log(res);
+                });
+            }
           } else {
             navigation.replace('Login');
           }
