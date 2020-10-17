@@ -26,6 +26,8 @@ import {
 import {ScrollView} from 'react-native-gesture-handler';
 import {URL_API_MAINAPP, URL_PATH_FOTO_KANDIDAT} from '../../Utils/constant';
 import axios from 'axios';
+import jwt_decode from 'jwt-decode';
+
 const Pemilihan = ({route}) => {
   const navigation = useNavigation();
   const [camera, setCamera] = useState();
@@ -185,17 +187,24 @@ const Pemilihan = ({route}) => {
 
   useEffect(() => {
     if (route.params?.loaded) {
-      setStep(1);
+      // setStep(1);
       // ENABLE LATER
-      showCamera('TRIGGER SHOW CAMERA');
-      showActionButton(1);
       console.log('TAB - Pemilihan');
       setPilihan('');
       setDataKandidat([]);
       getByKey('token', false)
         .then(function (res) {
           if (res) {
+            // setStep(1);
             setToken(res);
+            var decoded_token = jwt_decode(res);
+            if (decoded_token.data.sudah_memilih == true) {
+              setStep(3);
+            } else {
+              setStep(1);
+              showCamera('TRIGGER SHOW CAMERA');
+              showActionButton(1);
+            }
             console.log('Masih Login.');
             ajax(URL_API_MAINAPP + 'mobile/api/', {
               operation: 'getKandidat',
@@ -239,7 +248,7 @@ const Pemilihan = ({route}) => {
 
   return (
     <View style={styles.container}>
-      {ElCamera}
+      {step == 1 && ElCamera}
       {step == 1 && (
         <View
           style={{
@@ -304,6 +313,11 @@ const Pemilihan = ({route}) => {
             </View>
           </View>
         </>
+      )}
+      {step == 3 && (
+        <View>
+          <MainContent headerText="Status Pemilihan"></MainContent>
+        </View>
       )}
     </View>
   );

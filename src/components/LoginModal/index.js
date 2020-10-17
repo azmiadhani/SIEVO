@@ -97,9 +97,13 @@ const LoginModal = (props) => {
                     res2 = JSON.parse(res2);
                     console.log(res2);
                     if (res2.status) {
-                      storeData('token', res2.token);
-                      setToken(res2.token);
-                      console.log(res2.token);
+                      if (res2.token) {
+                        storeData('token', res2.token);
+                        setToken(res2.token);
+                        console.log(res2.token);
+                      } else {
+                        HAlert('Gagal Masuk', '');
+                      }
                     } else {
                       HAlert(
                         'Gagal Masuk',
