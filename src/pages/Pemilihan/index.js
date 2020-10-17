@@ -185,22 +185,10 @@ const Pemilihan = ({route}) => {
 
   useEffect(() => {
     if (route.params?.loaded) {
-      if (!route.params.reset) {
-        // navigation.reset({
-        //   index: 0,
-        //   routes: [
-        //     {
-        //       name: 'Pemilihan',
-        //       params: {loaded: Math.random(), reset: true},
-        //     },
-        //   ],
-        //   // actions: [navigation.navigate({routeName: 'Pemilihan'})],
-        // });
-      }
-      setStep(2);
+      setStep(1);
       // ENABLE LATER
-      // showCamera('TRIGGER SHOW CAMERA');
-      // showActionButton(1);
+      showCamera('TRIGGER SHOW CAMERA');
+      showActionButton(1);
       console.log('TAB - Pemilihan');
       setPilihan('');
       setDataKandidat([]);
@@ -237,8 +225,16 @@ const Pemilihan = ({route}) => {
     }
   }, [route.params?.loaded]);
 
-  const sudahMemilih = () => {
-    navigation.navigate;
+  const navi = (name, extraparam) => {
+    navigation.reset({
+      index: 0,
+      routes: [
+        {
+          name: name,
+          params: extraparam,
+        },
+      ],
+    });
   };
 
   return (

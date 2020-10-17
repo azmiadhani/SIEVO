@@ -41,7 +41,7 @@ const BottomNavigator = ({state, descriptors, navigation}) => {
               routes: [
                 {
                   name: route.name,
-                  params: {loaded: Math.random(), reset: true},
+                  params: {loaded: Math.random()},
                 },
               ],
               // actions: [navigation.navigate({routeName: 'Pemilihan'})],
