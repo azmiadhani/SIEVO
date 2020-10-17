@@ -23,6 +23,7 @@ import {
   getAllKeys,
 } from '../../Utils/asyncstorage';
 import jwt_decode from 'jwt-decode';
+import {HAlert} from '../../Utils/HAlert';
 
 function ajax(url, pkg) {
   // resource : https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
@@ -87,17 +88,27 @@ const LoginModal = (props) => {
             })
               .then(function (res) {
                 res = JSON.parse(res);
-                // console.log(res);
+                console.log(res);
                 if (res.token) {
                   ajax(URL_API_MAINAPP + 'mobile/api/', {
                     token: res.token,
                     operation: 'login',
                   }).then(function (res2) {
                     res2 = JSON.parse(res2);
-                    storeData('token', res2.token);
-                    setToken(res2.token);
-                    console.log(res2.token);
+                    console.log(res2);
+                    if (res2.status) {
+                      storeData('token', res2.token);
+                      setToken(res2.token);
+                      console.log(res2.token);
+                    } else {
+                      HAlert(
+                        'Gagal Masuk',
+                        'Anda adalah mahasiswa berstatus tidak aktif',
+                      );
+                    }
                   });
+                } else {
+                  HAlert('Gagal Masuk', 'Nomor Induk / Kata Sandi salah.');
                 }
               })
               .catch(function (res) {
