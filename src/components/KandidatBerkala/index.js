@@ -58,7 +58,7 @@ const KandidatBerkala = (props) => {
             </View>
           </TouchableOpacity>
         )}
-        keyExtractor={(item) => item.kandidatId}
+        keyExtractor={(item) => item.kandidatNomorurut}
       />
     </View>
   );
