@@ -108,6 +108,11 @@ const LoginModal = (props) => {
                     console.log(res2);
                     if (res2.status) {
                       if (res2.token) {
+                        var res2_decoded = jwt_decode(res2.token);
+                        storeData(
+                          'sudah_memilih',
+                          res2_decoded.data.sudah_memilih ? 'sudah' : 'belum',
+                        );
                         storeData('token', res2.token);
                         setToken(res2.token);
                         console.log(res2.token);

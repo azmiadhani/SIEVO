@@ -10,7 +10,7 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import {checkLogin, getByKey} from '../../Utils/asyncstorage';
+import {checkLogin, getByKey, storeData} from '../../Utils/asyncstorage';
 import {HAlert} from '../../Utils/HAlert';
 import {useNavigation, CommonActions} from '@react-navigation/native';
 import {RNCamera} from 'react-native-camera';
@@ -200,54 +200,65 @@ const Pemilihan = ({route}) => {
       getByKey('token', false)
         .then(function (res) {
           if (res) {
-            // setStep(1);
             setToken(res);
-            var decoded_token = jwt_decode(res);
-            if (decoded_token.data.sudah_memilih == true) {
-              setStep(3);
-              console.log('Masih Login.');
-              ajax(URL_API_MAINAPP + 'mobile/api/', {
-                operation: 'pilihanBerkala',
-                token: res,
-              })
-                .then(function (res2) {
-                  res2 = JSON.parse(res2);
-                  console.log(res2.listBerkala);
-                  if (res2.listBerkala) {
-                    console.log('List Berkala Updated');
-                    setDataBerkala(res2.listBerkala);
+            getByKey('sudah_memilih', false)
+              .then(function (res_sudah) {
+                if (res_sudah) {
+                  // setStep(1);
+                  console.log('SUDAH MEMILIH =', res_sudah);
+                  if (res_sudah == 'sudah') {
+                    setStep(3);
+                    console.log('Masih Login.');
+                    ajax(URL_API_MAINAPP + 'mobile/api/', {
+                      operation: 'pilihanBerkala',
+                      token: res,
+                    })
+                      .then(function (res2) {
+                        res2 = JSON.parse(res2);
+                        console.log(res2.listBerkala);
+                        if (res2.listBerkala) {
+                          console.log('List Berkala Updated');
+                          setDataBerkala(res2.listBerkala);
+                        } else {
+                          // Tidak ada Kandidat
+                          console.log('Tidak ada List Berkala');
+                        }
+                      })
+                      .catch(function (res) {
+                        console.log(res);
+                      });
                   } else {
-                    // Tidak ada Kandidat
-                    console.log('Tidak ada List Berkala');
+                    setStep(1);
+                    showCamera('TRIGGER SHOW CAMERA');
+                    showActionButton(1);
+                    console.log('Masih Login.');
+                    ajax(URL_API_MAINAPP + 'mobile/api/', {
+                      operation: 'getKandidat',
+                      token: res,
+                    })
+                      .then(function (res2) {
+                        res2 = JSON.parse(res2);
+                        // console.log(res);
+                        if (res2.listKandidat) {
+                          console.log('Kandidat Loaded');
+                          setDataKandidat(res2.listKandidat);
+                        } else {
+                          // Tidak ada Kandidat
+                          console.log('Tidak ada kandidat');
+                        }
+                      })
+                      .catch(function (res) {
+                        console.log(res);
+                      });
                   }
-                })
-                .catch(function (res) {
-                  console.log(res);
-                });
-            } else {
-              setStep(1);
-              showCamera('TRIGGER SHOW CAMERA');
-              showActionButton(1);
-              console.log('Masih Login.');
-              ajax(URL_API_MAINAPP + 'mobile/api/', {
-                operation: 'getKandidat',
-                token: res,
+                } else {
+                  navigation.replace('Login');
+                  s;
+                }
               })
-                .then(function (res2) {
-                  res2 = JSON.parse(res2);
-                  // console.log(res);
-                  if (res2.listKandidat) {
-                    console.log('Kandidat Loaded');
-                    setDataKandidat(res2.listKandidat);
-                  } else {
-                    // Tidak ada Kandidat
-                    console.log('Tidak ada kandidat');
-                  }
-                })
-                .catch(function (res) {
-                  console.log(res);
-                });
-            }
+              .catch(function (res) {
+                console.log(res);
+              });
           } else {
             navigation.replace('Login');
           }
@@ -322,7 +333,25 @@ const Pemilihan = ({route}) => {
                     .then(function (res2) {
                       console.log(res2);
                       if (res2.status) {
-                        HAlert('', res2.keterangan);
+                        storeData('sudah_memilih', 'sudah');
+                        Alert.alert(
+                          '',
+                          res2.keterangan,
+                          [
+                            {
+                              text: 'OK',
+                              onPress: () => {
+                                navigation.navigate('Pemilihan', {
+                                  pemilihanReload: 1,
+                                  loaded: Math.random(),
+                                });
+                              },
+                            },
+                          ],
+                          {
+                            cancelable: false,
+                          },
+                        );
                       } else {
                         HAlert('Gagal', res2.keterangan);
                       }
