@@ -35,11 +35,7 @@ const TimelineList = (props) => {
             </View>
             <View style={{flexDirection: 'row'}}>
               <Text style={[styles.timelineTanggal]}>
-                {item.timelineTanggalMulai}
-              </Text>
-              <Text style={[styles.timelineTanggal]}> s.d </Text>
-              <Text style={[styles.timelineTanggal]}>
-                {item.timelineTanggalSelesai}
+                {item.timelineTanggalMulai} s.d {item.timelineTanggalSelesai}
               </Text>
             </View>
             {item.timelineDeskripsi && (
@@ -70,7 +66,7 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   timelineTanggal: {
-    fontSize: 13,
+    fontSize: 10,
     fontFamily: 'Cabin-Regular',
   },
   timelineJudul: {

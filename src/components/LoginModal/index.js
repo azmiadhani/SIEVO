@@ -24,6 +24,8 @@ import {
 } from '../../Utils/asyncstorage';
 import jwt_decode from 'jwt-decode';
 import {HAlert} from '../../Utils/HAlert';
+import {useNavigation, CommonActions} from '@react-navigation/native';
+import {Alert} from 'react-native';
 
 function ajax(url, pkg) {
   // resource : https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
@@ -43,6 +45,7 @@ function ajax(url, pkg) {
   });
 }
 const LoginModal = (props) => {
+  const navigation = useNavigation();
   const [user, setUsername] = useState('1611016110005');
   const [pass, setPassword] = useState('jakarta12');
   const [isLoading, setLoading] = useState(true);
@@ -82,6 +85,13 @@ const LoginModal = (props) => {
           label="Login"
           onPress={() => {
             removeAllData();
+            if (!user || !pass) {
+              HAlert(
+                'Gagal Masuk',
+                'Nomor Induk / Kata Sandi tidak boleh kosong',
+              );
+              return 0;
+            }
             ajax(URL_API_LOGIN + 'api/v1/auth', {
               username: user,
               password: pass,
@@ -117,6 +127,13 @@ const LoginModal = (props) => {
               })
               .catch(function (res) {
                 console.log(res);
+                Alert.alert(
+                  'Gagal',
+                  'Terjadi kesalahan saat menghubungi server, coba lagi',
+                  {
+                    cancelable: false,
+                  },
+                );
               });
           }}
         />
