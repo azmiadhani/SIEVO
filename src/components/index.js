@@ -10,6 +10,7 @@ import Kandidat from './Kandidat';
 import KandidatBerkala from './KandidatBerkala';
 import MainContentPemilihan from './MainContentPemilihan';
 import MainContentBerkala from './MainContentBerkala';
+import TimelineList from './TimelineList';
 
 export {
   BottomNavigator,
@@ -24,4 +25,5 @@ export {
   KandidatBerkala,
   MainContentPemilihan,
   MainContentBerkala,
+  TimelineList,
 };
