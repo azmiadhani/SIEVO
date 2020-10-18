@@ -52,6 +52,7 @@ const LoginModal = (props) => {
   const [data, setData] = useState([]);
   const [text, setText] = useState('');
   const [token, setToken] = useState('');
+  const [simpan, setSimpan] = useState(true);
   useEffect(() => {
     getByKey('token')
       .then(function (res) {
@@ -83,7 +84,9 @@ const LoginModal = (props) => {
         {/* <AsyncTest /> */}
         <HButton
           label="Login"
+          disabled={simpan ? false : true}
           onPress={() => {
+            setSimpan(false);
             removeAllData();
             if (!user || !pass) {
               HAlert(
@@ -103,42 +106,67 @@ const LoginModal = (props) => {
                   ajax(URL_API_MAINAPP + 'mobile/api/', {
                     token: res.token,
                     operation: 'login',
-                  }).then(function (res2) {
-                    res2 = JSON.parse(res2);
-                    console.log(res2);
-                    if (res2.status) {
-                      if (res2.token) {
-                        var res2_decoded = jwt_decode(res2.token);
-                        storeData(
-                          'sudah_memilih',
-                          res2_decoded.data.sudah_memilih ? 'sudah' : 'belum',
-                        );
-                        storeData('token', res2.token);
-                        setToken(res2.token);
-                        console.log(res2.token);
+                  })
+                    .then(function (res2) {
+                      res2 = JSON.parse(res2);
+                      console.log(res2);
+                      if (res2.status) {
+                        if (res2.token) {
+                          var res2_decoded = jwt_decode(res2.token);
+                          storeData(
+                            'sudah_memilih',
+                            res2_decoded.data.sudah_memilih ? 'sudah' : 'belum',
+                          );
+                          storeData('token', res2.token);
+                          setToken(res2.token);
+                          console.log(res2.token);
+                        } else {
+                          HAlert('Gagal Masuk', '');
+                        }
                       } else {
-                        HAlert('Gagal Masuk', '');
+                        HAlert(
+                          'Gagal Masuk',
+                          'Anda adalah mahasiswa berstatus tidak aktif',
+                        );
                       }
-                    } else {
-                      HAlert(
-                        'Gagal Masuk',
-                        'Anda adalah mahasiswa berstatus tidak aktif',
+                      setSimpan(true);
+                    })
+                    .catch(function (res) {
+                      console.log(res);
+                      Alert.alert(
+                        'Gagal',
+                        'Terjadi kesalahan saat menghubungi server, coba lagi',
+                        [
+                          {
+                            text: 'OK',
+                          },
+                        ],
+                        {
+                          cancelable: false,
+                        },
                       );
-                    }
-                  });
+                      setSimpan(true);
+                    });
                 } else {
                   HAlert('Gagal Masuk', 'Nomor Induk / Kata Sandi salah.');
                 }
+                setSimpan(true);
               })
               .catch(function (res) {
                 console.log(res);
                 Alert.alert(
                   'Gagal',
                   'Terjadi kesalahan saat menghubungi server, coba lagi',
+                  [
+                    {
+                      text: 'OK',
+                    },
+                  ],
                   {
                     cancelable: false,
                   },
                 );
+                setSimpan(true);
               });
           }}
         />
