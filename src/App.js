@@ -10,12 +10,14 @@ const App = () => {
       .then((token) => {
         console.log(token);
       });
+    const subscribe = messaging()
+      .subscribeToTopic('pemilihan2020')
+      .then(() => console.log('Subscribed to topic!'));
+    // const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+    //   Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    // });
 
-    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
-
-    return unsubscribe;
+    // return subscribe;
   }, []);
   return (
     <NavigationContainer>
