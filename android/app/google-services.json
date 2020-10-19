@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "670633414433",
+    "firebase_url": "https://pemilu-m.firebaseio.com",
+    "project_id": "pemilu-m",
+    "storage_bucket": "pemilu-m.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:670633414433:android:51e19476c01748b882b860",
+        "android_client_info": {
+          "package_name": "com.sievo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "670633414433-3t0p26hc1gee828so7krv1ca2995nc3m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiIaWVvvB8H2FCAV7I9WXUJRQGvq4B6sk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "670633414433-3t0p26hc1gee828so7krv1ca2995nc3m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
