@@ -9,6 +9,17 @@ export const storeData = async (key, value) => {
   console.log('Done.');
 };
 
+export const removeData = async (dataArray) => {
+  dataArray.forEach(async (item, index) => {
+    try {
+      await AsyncStorage.removeItem(item);
+    } catch (e) {
+      // remove error
+    }
+  });
+  console.log('Done.');
+};
+
 export const removeAllData = async () => {
   let keys = [];
   try {

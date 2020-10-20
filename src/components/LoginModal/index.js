@@ -20,6 +20,7 @@ import {
   storeData,
   getByKey,
   removeAllData,
+  removeData,
   getAllKeys,
 } from '../../Utils/asyncstorage';
 import jwt_decode from 'jwt-decode';
@@ -87,7 +88,7 @@ const LoginModal = (props) => {
           disabled={simpan ? false : true}
           onPress={() => {
             setSimpan(false);
-            removeAllData();
+            removeData(['token']);
             if (!user || !pass) {
               HAlert(
                 'Gagal Masuk',

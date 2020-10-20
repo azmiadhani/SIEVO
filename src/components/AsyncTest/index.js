@@ -16,6 +16,8 @@ const index = () => {
         onPress={async () => {
           storeData('test1', 'ini key 1');
           storeData('test2', 'ini key 2');
+          storeData('test3', 'ini key 3');
+          storeData('test4', 'ini key 4');
         }}
       />
       <HButton
