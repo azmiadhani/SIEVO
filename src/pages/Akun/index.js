@@ -8,7 +8,6 @@ import {
   getAllKeys,
   checkLogin,
 } from '../../Utils/asyncstorage';
-import {URL_API_MAINAPP} from '../../Utils/constant';
 import jwt_decode from 'jwt-decode';
 import {useNavigation} from '@react-navigation/native';
 

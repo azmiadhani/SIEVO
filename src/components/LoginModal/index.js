@@ -15,7 +15,7 @@ import {
   OutlinedTextField,
 } from '@ubaids/react-native-material-textfield';
 import {HInput, HButton, AsyncTest} from '../../components';
-import {URL_API_LOGIN, URL_API_MAINAPP} from '../../Utils/constant';
+import {URL_API_LOGIN, URL_DOMAIN} from '../../Utils/constant';
 import {
   storeData,
   getByKey,
@@ -104,7 +104,7 @@ const LoginModal = (props) => {
                 res = JSON.parse(res);
                 console.log(res);
                 if (res.token) {
-                  ajax(URL_API_MAINAPP + 'mobile/api/', {
+                  ajax(URL_DOMAIN + 'mobile/api/', {
                     token: res.token,
                     operation: 'login',
                   })

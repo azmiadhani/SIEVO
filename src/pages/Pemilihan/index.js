@@ -26,7 +26,7 @@ import {
   MainContentBerkala,
 } from '../../components';
 import {ScrollView} from 'react-native-gesture-handler';
-import {URL_API_MAINAPP, URL_PATH_FOTO_KANDIDAT} from '../../Utils/constant';
+import {URL_DOMAIN} from '../../Utils/constant';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 
@@ -209,7 +209,7 @@ const Pemilihan = ({route}) => {
                   if (res_sudah == 'sudah') {
                     setStep(3);
                     console.log('Masih Login.');
-                    ajax(URL_API_MAINAPP + 'mobile/api/', {
+                    ajax(URL_DOMAIN + 'mobile/api/', {
                       operation: 'pilihanBerkala',
                       token: res,
                     })
@@ -232,7 +232,7 @@ const Pemilihan = ({route}) => {
                     showCamera('TRIGGER SHOW CAMERA');
                     showActionButton(1);
                     console.log('Masih Login.');
-                    ajax(URL_API_MAINAPP + 'mobile/api/', {
+                    ajax(URL_DOMAIN + 'mobile/api/', {
                       operation: 'getKandidat',
                       token: res,
                     })
@@ -329,7 +329,7 @@ const Pemilihan = ({route}) => {
                 disabled={pilihan ? (simpan ? false : true) : true}
                 onPress={() => {
                   setSimpan(false);
-                  submit_ajax(URL_API_MAINAPP + 'mobile/api_fd/')
+                  submit_ajax(URL_DOMAIN + 'mobile/api_fd/')
                     .then(function (res2) {
                       console.log(res2);
                       if (res2.status) {

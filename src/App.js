@@ -9,7 +9,6 @@ import {
   removeAllData,
   getAllKeys,
 } from '../src/Utils/asyncstorage';
-import {URL_API_MAINAPP} from './Utils/constant';
 const App = () => {
   const ajax = (url, pkg) => {
     // resource : https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
@@ -30,7 +29,7 @@ const App = () => {
   };
   const sendTokenFB = (token) => {
     console.log('Kirim ke DB');
-    ajax(URL_API_MAINAPP + 'mobile/api', {
+    ajax(URL_DOMAIN + 'mobile/api', {
       operation: 'deviceTokenStore',
       tokenFB: token,
     })

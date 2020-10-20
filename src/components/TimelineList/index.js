@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {RaiseHand} from '../../assets';
-import {URL_API_MAINAPP, URL_PATH_FOTO_KANDIDAT} from '../../Utils/constant';
 
 const TimelineList = (props) => {
   console.log(props);
