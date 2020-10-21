@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View, Alert, Dimensions} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import Router from './router';
 import messaging from '@react-native-firebase/messaging';
@@ -9,12 +16,13 @@ import {
   removeAllData,
   getAllKeys,
 } from '../src/Utils/asyncstorage';
-import {URL_DOMAIN} from '../src/Utils/constant';
+import {URL_DOMAIN, URL_JSON_API} from '../src/Utils/constant';
 import axios from 'axios';
 import ConnectionError from '../src/pages/ConnectionError';
 const App = () => {
   const [getUrl, setGetUrl] = useState('loading');
   const [urlError, setUrlError] = useState('loading');
+  const [theError, setTheError] = useState('');
   const get_url = () => {
     // resource : https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
     // `delay` returns a promise
@@ -23,9 +31,7 @@ const App = () => {
     return new Promise(function (resolve, reject) {
       // Make a request for a user with a given ID
       axios
-        .get(
-          'https://firebasestorage.googleapis.com/v0/b/pemilu-m.appspot.com/o/url.json?alt=media&token=badb6708-0407-4b06-9b41-3e6200e3641e',
-        )
+        .get(URL_JSON_API)
         .then(function (response) {
           // handle success
           resolve(response.data);
@@ -107,12 +113,14 @@ const App = () => {
             .subscribeToTopic('pemilihan2020')
             .then(() => console.log('Subscribed to topic!'));
         } else {
-          setUrlError(false);
+          setTheError('Error : URL utama tidak tersedia');
+          setUrlError(true);
         }
       })
       .catch(function (res) {
         console.log('get_url() --> ' + res);
         setUrlError(true);
+        setTheError('Error : ' + res);
       });
     // const unsubscribe = messaging().onMessage(async (remoteMessage) => {
     //   Alert.alert(
@@ -140,9 +148,26 @@ const App = () => {
               paddingLeft: windowWidth * 0.05,
             }}>
             {urlError == true && (
-              <Text style={{textAlign: 'center'}}>
-                Terjadi kesalahan pada koneksi ke server, coba lagi nanti!
-              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  Alert.alert(
+                    '',
+                    theError,
+                    [
+                      {
+                        text: 'OK',
+                        onPress: () => {},
+                      },
+                    ],
+                    {
+                      cancelable: false,
+                    },
+                  );
+                }}>
+                <Text style={{textAlign: 'center'}}>
+                  Terjadi kesalahan pada koneksi ke server, coba lagi nanti!
+                </Text>
+              </TouchableOpacity>
             )}
           </View>
         </View>
