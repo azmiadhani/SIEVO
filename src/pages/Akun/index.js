@@ -5,6 +5,7 @@ import {
   storeData,
   getByKey,
   removeAllData,
+  removeData,
   getAllKeys,
   checkLogin,
 } from '../../Utils/asyncstorage';
@@ -101,7 +102,7 @@ const Akun = ({route}) => {
               <HButton
                 label="Logout"
                 onPress={() => {
-                  removeAllData().then(function () {
+                  removeData(['token']).then(function () {
                     setRefresh(Math.random());
                   });
                   // console.log(refresh);
