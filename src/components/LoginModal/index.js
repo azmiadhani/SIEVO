@@ -15,7 +15,7 @@ import {
   OutlinedTextField,
 } from '@ubaids/react-native-material-textfield';
 import {HInput, HButton, AsyncTest} from '../../components';
-import {URL_API_LOGIN, URL_DOMAIN} from '../../Utils/constant';
+import {URL_API_LOGIN} from '../../Utils/constant';
 import {
   storeData,
   getByKey,
@@ -54,11 +54,27 @@ const LoginModal = (props) => {
   const [text, setText] = useState('');
   const [token, setToken] = useState('');
   const [simpan, setSimpan] = useState(true);
+  const [URL_DOMAIN, setURL_DOMAIN] = useState('');
+  useEffect(() => {
+    getByKey('BASE_URL', false).then(function (res) {
+      setURL_DOMAIN(res);
+      console.log('BASE_URL --> ' + URL_DOMAIN);
+    });
+  }, []);
   useEffect(() => {
     getByKey('token')
       .then(function (res) {
         if (res) {
-          props.navigation.replace('MainApp');
+          props.navigation.reset({
+            index: 0,
+            routes: [
+              {
+                name: 'MainApp',
+                params: {URL: 'ABC'},
+              },
+            ],
+            // actions: [navigation.navigate({routeName: 'Pemilihan'})],
+          });
         } else {
           console.log('kunci tidak ada!');
         }

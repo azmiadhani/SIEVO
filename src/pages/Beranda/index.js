@@ -12,7 +12,7 @@ const Beranda = ({route}) => {
   useEffect(() => {
     if (route.params?.loaded) {
       console.log('TAB - Beranda');
-      console.log(route.params);
+      // console.log(route.params);
       checkLogin()
         .then(function (res) {
           if (res) {
@@ -33,7 +33,7 @@ const Beranda = ({route}) => {
         if (res) {
           res = jwt_decode(res);
           if (res.data.nama) {
-            setNama(res.data.nama);
+            setNama(res.data.nama + route.params.URL);
           }
         }
       })
