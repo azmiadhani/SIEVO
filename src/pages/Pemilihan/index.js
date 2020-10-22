@@ -39,7 +39,7 @@ const Pemilihan = ({route}) => {
   const [picture2, setPicture2] = useState([]);
 
   // component
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(5);
   const [ElCamera, setElCamera] = useState(<View></View>);
   const [ActionButton, setActionButton] = useState(<View></View>);
 
@@ -109,10 +109,15 @@ const Pemilihan = ({route}) => {
   };
 
   const showActionButton = (show) => {
+    if (step == 0) {
+      var label = 'AMBIL FOTO SELFIE DENGAN KTM';
+    } else if (step == 1) {
+      var label = 'AMBIL FOTO KTM';
+    }
     if (show) {
       setActionButton(
         <HButton
-          label="AMBIL FOTO"
+          label={label}
           onPress={takePicture.bind(this)}
           // console.log(refresh);
         />,
@@ -120,8 +125,7 @@ const Pemilihan = ({route}) => {
     } else {
       setActionButton(
         <HButton
-          label="AMBIL FOTO"
-          onPress={takePicture.bind(this)}
+          label={label}
           disabled={true}
           // console.log(refresh);
         />,
@@ -373,9 +377,9 @@ const Pemilihan = ({route}) => {
                     textAlign: 'center',
                     paddingTop: 20,
                   }}>
-                  Pastikan Wajah & KTM/Profil SIMARI anda terlihat dengan jelas
-                  dan tidak blur agar pihak panitia bisa mem-verifikasi bahwa
-                  anda adalah pemilih valid.
+                  Pastikan KTM/Profil SIMARI anda terlihat dengan jelas dan
+                  tidak blur agar pihak panitia bisa mem-verifikasi bahwa anda
+                  adalah pemilih valid.
                 </Text>
               </View>
             </ScrollView>
