@@ -16,7 +16,7 @@ import {
   removeAllData,
   getAllKeys,
 } from '../src/Utils/asyncstorage';
-import {URL_DOMAIN, URL_JSON_API} from '../src/Utils/constant';
+import {URL_JSON_API} from '../src/Utils/constant';
 import axios from 'axios';
 import ConnectionError from '../src/pages/ConnectionError';
 const App = () => {
@@ -65,8 +65,9 @@ const App = () => {
     });
   };
   const sendTokenFB = (token) => {
+    console.log('sendtokenfb');
     console.log('Kirim ke DB');
-    ajax(URL_DOMAIN + 'mobile/api', {
+    ajax(getUrl + 'mobile/api', {
       operation: 'deviceTokenStore',
       tokenFB: token,
     })
@@ -89,10 +90,11 @@ const App = () => {
     console.log('app loaded');
     get_url()
       .then(function (res_url) {
-        if (res_url.URL_DOMAIN) {
-          console.log('get_url() --> ' + res_url);
+        console.log(res_url.URL);
+        if (res_url.URL) {
+          console.log('get_url() --> ' + res_url.URL);
           setGetUrl(true);
-          storeData('BASE_URL', res_url.URL_DOMAIN);
+          storeData('BASE_URL', res_url.URL);
 
           messaging()
             .getToken()
@@ -118,7 +120,7 @@ const App = () => {
         }
       })
       .catch(function (res) {
-        console.log('get_url() --> ' + res);
+        console.log('error get_url() --> ' + res);
         setUrlError(true);
         setTheError('Error : ' + res);
       });

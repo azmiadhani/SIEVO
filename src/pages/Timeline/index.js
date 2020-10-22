@@ -3,7 +3,6 @@ import {StyleSheet, Text, View, Button} from 'react-native';
 import {MainContent, MainContentBerkala, TimelineList} from '../../components';
 import {checkLogin, getByKey} from '../../Utils/asyncstorage';
 import {useNavigation} from '@react-navigation/native';
-import {URL_DOMAIN} from '../../Utils/constant';
 
 const Timeline = ({route}) => {
   const navigation = useNavigation();
@@ -34,7 +33,7 @@ const Timeline = ({route}) => {
         .then(function (res) {
           if (res) {
             console.log('Masih Login.');
-            ajax(URL_DOMAIN + 'mobile/api/', {
+            ajax(route.params.URL + 'mobile/api/', {
               operation: 'getTimeline',
               token: res,
             })
