@@ -1,12 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, Button} from 'react-native';
-import {MainContent, MainContentBerkala, TimelineList} from '../../components';
+import {
+  MainContent,
+  MainContentBerkala,
+  TimelineList,
+  TimelineTable,
+} from '../../components';
 import {checkLogin, getByKey} from '../../Utils/asyncstorage';
 import {useNavigation} from '@react-navigation/native';
 
 const Timeline = ({route}) => {
   const navigation = useNavigation();
   const [timeline, setTimeline] = useState([]);
+  const [isBusy, setIsBusy] = useState(true);
 
   function ajax(url, pkg) {
     // resource : https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
@@ -43,6 +49,7 @@ const Timeline = ({route}) => {
                 if (res2.list) {
                   console.log('Lists Updated');
                   setTimeline(res2.list);
+                  setIsBusy(false);
                 } else {
                   // Tidak ada Kandidat
                   console.log('Tidak ada List');
@@ -63,9 +70,11 @@ const Timeline = ({route}) => {
 
   return (
     <View>
-      <MainContentBerkala headerText="Timeline">
-        <TimelineList data={timeline} />
-      </MainContentBerkala>
+      {!isBusy && (
+        <MainContentBerkala headerText="Timeline">
+          <TimelineTable data={timeline} />
+        </MainContentBerkala>
+      )}
     </View>
   );
 };
