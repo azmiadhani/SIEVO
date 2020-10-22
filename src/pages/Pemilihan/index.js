@@ -301,7 +301,11 @@ const Pemilihan = ({route}) => {
             }
           }}
           style={styles.preview}
-          type={RNCamera.Constants.Type.front}
+          type={
+            step == 0
+              ? RNCamera.Constants.Type.front
+              : RNCamera.Constants.Type.back
+          }
           // flashMode={RNCamera.Constants.FlashMode.on}
           // faceDetectionMode={RNCamera.Constants.FaceDetection.Mode.accurate}
           // onFacesDetected={(data) => console.log(data)}
