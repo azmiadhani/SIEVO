@@ -12,6 +12,7 @@ import MainContentPemilihan from './MainContentPemilihan';
 import MainContentBerkala from './MainContentBerkala';
 import TimelineList from './TimelineList';
 import TimelineTable from './TimelineTable';
+import BerandaList from './BerandaList';
 
 export {
   BottomNavigator,
@@ -28,4 +29,5 @@ export {
   MainContentBerkala,
   TimelineList,
   TimelineTable,
+  BerandaList,
 };

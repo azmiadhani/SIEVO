@@ -34,7 +34,7 @@ const Timeline = ({route}) => {
 
   useEffect(() => {
     if (route.params?.loaded) {
-      console.log('TAB - Beranda');
+      console.log('TAB - Timeline');
       getByKey('token', false)
         .then(function (res) {
           if (res) {
