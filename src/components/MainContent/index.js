@@ -26,11 +26,7 @@ const MainContent = (props) => {
       </View>
 
       <SafeAreaView style={styles.background}>
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.body}>
-          {props.children}
-        </ScrollView>
+        <View style={styles.scrollView}>{props.children}</View>
       </SafeAreaView>
       <View style={styles.footer}>
         <Image source={LogoKPUBawaslu} style={styles.footerLogo} />

@@ -48,7 +48,7 @@ const MainApp = ({routes}) => {
       .then(function (res) {
         if (res) {
           console.log('BASEBASE ' + res);
-          // setBASE_URL(res);
+          setBASE_URL(res);
           setInitParam({URL: res});
           setBusy(false);
         }
@@ -67,7 +67,7 @@ const MainApp = ({routes}) => {
           <Tab.Screen
             name="Beranda"
             component={Beranda}
-            initialParams={initParam}
+            initialParams={{URL: BASE_URL, loaded: Math.random()}}
           />
           <Tab.Screen
             name="Timeline"

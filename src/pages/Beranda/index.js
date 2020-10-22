@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, Image, Dimensions} from 'react-native';
-import {MainContent, BerandaList} from '../../components';
+import {MainContent, BerandaList, M} from '../../components';
 import {HInput, HButton, AsyncTest} from '../../components';
 import {RaiseHand} from '../../assets';
 import jwt_decode from 'jwt-decode';
@@ -31,7 +31,7 @@ const Beranda = ({route}) => {
 
   useEffect(() => {
     if (route.params?.loaded) {
-      console.log('TAB - Timeline');
+      console.log('TAB - Beranda');
       getByKey('token', false)
         .then(function (res) {
           if (res) {
@@ -82,25 +82,7 @@ const Beranda = ({route}) => {
   return (
     <MainContent headerText="Beranda">
       {/* <AsyncTest /> */}
-      {!isBusy && (
-        <>
-          <BerandaList data={berita} />
-          {/* <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              paddingTop: windowWidth * 0.3,
-            }}>
-            <View>
-              <Image source={RaiseHand} style={styles.headerLogo} />
-            </View>
-            <Text style={styles.bodyText}>Halo{nama ? ', ' + nama : ''}</Text>
-            <Text style={styles.bodyText}>
-              Selamat datang di Aplikasi PEMILU-M ULM
-            </Text>
-          </View> */}
-        </>
-      )}
+      {!isBusy && <BerandaList data={berita} />}
     </MainContent>
   );
 };
