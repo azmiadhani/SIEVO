@@ -17,7 +17,7 @@ const TimelineList = (props) => {
   const [tableHead, setTableHead] = useState(['Kegiatan', 'Tanggal']);
   const [widthArr, setWidthArr] = useState([
     windowWidth * 0.6,
-    windowWidth * 0.45,
+    windowWidth * 0.6,
   ]);
   const [tableData, setTableData] = useState([]);
   const [isBusy, setIsBusy] = useState(true);
@@ -49,7 +49,7 @@ const TimelineList = (props) => {
         <View>
           {!isBusy && (
             <>
-              <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
+              <Table borderStyle={{borderWidth: 1, borderColor: '#000000'}}>
                 <Row
                   data={tableHead}
                   widthArr={widthArr}
@@ -58,7 +58,7 @@ const TimelineList = (props) => {
                 />
               </Table>
               <ScrollView style={styles.dataWrapper}>
-                <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
+                <Table borderStyle={{borderWidth: 1, borderColor: '#000000'}}>
                   {tableData.map((rowData, index) => (
                     <Row
                       key={index}
@@ -66,7 +66,7 @@ const TimelineList = (props) => {
                       widthArr={widthArr}
                       style={[
                         styles.row,
-                        index % 2 && {backgroundColor: '#F7F6E7'},
+                        index % 2 && {backgroundColor: '#ffffff'},
                       ]}
                       textStyle={styles.text}
                     />
@@ -85,7 +85,7 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   container: {flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#ffffff'},
-  header: {height: 50, backgroundColor: '#a3a3a3'},
+  header: {height: 50, backgroundColor: '#dbdbdb'},
   text: {textAlign: 'center', fontWeight: '100', padding: 10},
   dataWrapper: {marginTop: -1},
   row: {height: windowHeight * 0.15, backgroundColor: '#ffffff'},
