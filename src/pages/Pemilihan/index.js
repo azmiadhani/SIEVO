@@ -32,7 +32,11 @@ import jwt_decode from 'jwt-decode';
 const Pemilihan = ({route}) => {
   const navigation = useNavigation();
   const [camera, setCamera] = useState();
+  const [showCam, setShowCam] = useState(false);
+  const [preview, setPreview] = useState(false);
+  const [preview2, setPreview2] = useState(false);
   const [picture, setPicture] = useState([]);
+  const [picture2, setPicture2] = useState([]);
 
   // component
   const [step, setStep] = useState(0);
@@ -63,25 +67,40 @@ const Pemilihan = ({route}) => {
       const options = {quality: 0.2, base64: true, mirrorImage: false};
       const data = await camera.takePictureAsync(options);
       if (data) {
-        setPicture(data);
-        setElCamera(
-          <View style={{flex: 2}}>
-            <ImageBackground
-              source={{uri: data.uri}}
-              style={{width: windowWidth, height: windowHeight * 0.7}}
-            />
-          </View>,
-        );
-        setActionButton(
-          <HButton
-            label="LANJUTKAN KE PEMILIHAN"
-            onPress={() => {
-              setStep(2);
-              setElCamera(<View></View>);
-            }}
-            // console.log(refresh);
-          />,
-        );
+        setShowCam(false);
+        if (step == 0) {
+          setPreview(true);
+          setPicture(data);
+          setActionButton(
+            <HButton
+              label="LANJUTKAN"
+              onPress={() => {
+                setStep(1);
+                setShowCam(true);
+                setPreview(false);
+              }}
+              // console.log(refresh);
+            />,
+          );
+        } else if (step == 1) {
+          setPreview2(true);
+          setPicture2(data);
+          setActionButton(
+            <HButton
+              label="LANJUTKAN"
+              onPress={() => {
+                setStep(2);
+                setShowCam(false);
+                setPreview2(false);
+                console.log('===SETPICTURE');
+                console.log(picture.uri);
+                console.log(picture2.uri);
+                console.log('###SETPICTURE');
+              }}
+              // console.log(refresh);
+            />,
+          );
+        }
       }
     } else {
       console.log('NOT OK - camera');
@@ -112,40 +131,6 @@ const Pemilihan = ({route}) => {
 
   const showCamera = (props) => {
     console.log(props);
-    setElCamera(
-      <RNCamera
-        ref={(ref) => {
-          console.log('SETTED - camera');
-          setCamera(ref);
-          if (!camera) {
-            console.log('tidak ada camera');
-            navigation.navigate('Pemilihan', {
-              pemilihanReload: 1,
-              loaded: Math.random(),
-            });
-          } else {
-            console.log('ada kamera');
-          }
-        }}
-        style={styles.preview}
-        type={RNCamera.Constants.Type.front}
-        // flashMode={RNCamera.Constants.FlashMode.on}
-        // faceDetectionMode={RNCamera.Constants.FaceDetection.Mode.accurate}
-        // onFacesDetected={(data) => console.log(data)}
-        androidCameraPermissionOptions={{
-          title: 'Permission to use camera',
-          message: 'We need your permission to use your camera',
-          buttonPositive: 'Ok',
-          buttonNegative: 'Cancel',
-        }}
-        androidRecordAudioPermissionOptions={{
-          title: 'Permission to use audio recording',
-          message: 'We need your permission to use your audio',
-          buttonPositive: 'Ok',
-          buttonNegative: 'Cancel',
-        }}
-      />,
-    );
   };
 
   function ajax(url, pkg) {
@@ -178,6 +163,7 @@ const Pemilihan = ({route}) => {
       fd.append('operation', 'submit_pilihan');
       fd.append('pilihanKandidatid', pilihan);
       fd.append('pilihanFoto', picture.base64);
+      fd.append('pilihanFotoBerkas', picture2.base64);
       axios
         .post(url, fd)
         .then(function (response) {
@@ -227,7 +213,8 @@ const Pemilihan = ({route}) => {
                         console.log(res);
                       });
                   } else {
-                    setStep(1);
+                    setStep(0);
+                    setShowCam(true);
                     showCamera('TRIGGER SHOW CAMERA');
                     showActionButton(1);
                     console.log('Masih Login.');
@@ -282,6 +269,85 @@ const Pemilihan = ({route}) => {
 
   return (
     <View style={styles.container}>
+      {preview && (
+        <View style={{flex: 2}}>
+          <ImageBackground
+            source={{uri: picture.uri}}
+            style={{width: windowWidth, height: windowHeight * 0.7}}
+          />
+        </View>
+      )}
+      {preview2 && (
+        <View style={{flex: 2}}>
+          <ImageBackground
+            source={{uri: picture2.uri}}
+            style={{width: windowWidth, height: windowHeight * 0.7}}
+          />
+        </View>
+      )}
+      {showCam && (
+        <RNCamera
+          ref={(ref) => {
+            console.log('SETTED - camera');
+            setCamera(ref);
+            if (!camera) {
+              console.log('tidak ada camera');
+              navigation.navigate('Pemilihan', {
+                pemilihanReload: 1,
+                loaded: Math.random(),
+              });
+            } else {
+              console.log('ada kamera');
+            }
+          }}
+          style={styles.preview}
+          type={RNCamera.Constants.Type.front}
+          // flashMode={RNCamera.Constants.FlashMode.on}
+          // faceDetectionMode={RNCamera.Constants.FaceDetection.Mode.accurate}
+          // onFacesDetected={(data) => console.log(data)}
+          androidCameraPermissionOptions={{
+            title: 'Permission to use camera',
+            message: 'We need your permission to use your camera',
+            buttonPositive: 'Ok',
+            buttonNegative: 'Cancel',
+          }}
+          androidRecordAudioPermissionOptions={{
+            title: 'Permission to use audio recording',
+            message: 'We need your permission to use your audio',
+            buttonPositive: 'Ok',
+            buttonNegative: 'Cancel',
+          }}
+        />
+      )}
+      {step == 0 && (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            backgroundColor: '#ffffff',
+            borderRadius: 15,
+          }}>
+          <View style={{paddingTop: 40}}>
+            <ScrollView>
+              <View
+                style={{paddingRight: 30, paddingLeft: 30, paddingBottom: 40}}>
+                {ActionButton}
+                <Text
+                  style={{
+                    fontFamily: 'Cabin-Regular',
+                    fontSize: 14,
+                    textAlign: 'center',
+                    paddingTop: 20,
+                  }}>
+                  Pastikan Wajah & KTM/Profil SIMARI anda terlihat dengan jelas
+                  dan tidak blur agar pihak panitia bisa mem-verifikasi bahwa
+                  anda adalah pemilih valid.
+                </Text>
+              </View>
+            </ScrollView>
+          </View>
+        </View>
+      )}
       {step == 1 && ElCamera}
       {step == 1 && (
         <View
