@@ -14,8 +14,9 @@ import {RaiseHand} from '../../assets';
 import {Table, TableWrapper, Row} from 'react-native-table-component';
 
 const TimelineList = (props) => {
-  const [tableHead, setTableHead] = useState(['Kegiatan', 'Tanggal']);
+  const [tableHead, setTableHead] = useState(['Kegiatan', 'Tanggal', 'Tempat']);
   const [widthArr, setWidthArr] = useState([
+    windowWidth * 0.6,
     windowWidth * 0.6,
     windowWidth * 0.6,
   ]);
@@ -27,14 +28,13 @@ const TimelineList = (props) => {
     const tableData_temp = [];
     for (let key in props.data) {
       const rowData = [];
-      let column1 = props.data[key].timelineJudul;
-      let column2 =
+      rowData.push(props.data[key].timelineJudul);
+      rowData.push(
         props.data[key].timelineTanggalMulai +
-        ' s.d ' +
-        props.data[key].timelineTanggalSelesai;
-      rowData.push(column1);
-      rowData.push(column2);
-      // rowData.push(props.data[key].timelineTanggalMulai+" s.d " +props.data[key].timelineTanggalSelesai":);
+          ' s.d ' +
+          props.data[key].timelineTanggalSelesai,
+      );
+      rowData.push(props.data[key].timelineTempat);
 
       tableData_temp.push(rowData);
       console.log(tableData_temp);
