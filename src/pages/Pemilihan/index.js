@@ -427,6 +427,7 @@ const Pemilihan = ({route}) => {
               dataKandidat={dataKandidat}
               terpilih={pilihan}
               onChange={pilihKandidat}
+              URL={route.params.URL}
             />
           </MainContentPemilihan>
           <View style={{alignItems: 'center', paddingTop: windowWidth * 0.05}}>
@@ -477,7 +478,7 @@ const Pemilihan = ({route}) => {
       {step == 3 && (
         <View>
           <MainContentBerkala headerText="Status Pemilihan">
-            <KandidatBerkala data={dataBerkala} />
+            <KandidatBerkala data={dataBerkala} URL={route.params.URL} />
           </MainContentBerkala>
         </View>
       )}

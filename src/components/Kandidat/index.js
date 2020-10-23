@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {RaiseHand} from '../../assets';
-import {URL_DOMAIN} from '../../Utils/constant';
 
 const Kandidat = (props) => {
   return (
@@ -42,7 +41,7 @@ const Kandidat = (props) => {
                 style={{width: windowWidth * 0.8, height: windowHeight * 0.2}}
                 resizeMode={'contain'}
                 source={{
-                  uri: URL_DOMAIN + 'assets/images/' + item.kandidatFoto,
+                  uri: props.URL + 'assets/images/' + item.kandidatFoto,
                 }}
               />
             </View>
