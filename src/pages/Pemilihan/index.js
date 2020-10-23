@@ -33,6 +33,7 @@ const Pemilihan = ({route}) => {
   const navigation = useNavigation();
   const [camera, setCamera] = useState();
   const [showCam, setShowCam] = useState(false);
+  const [showCam2, setShowCam2] = useState(false);
   const [preview, setPreview] = useState(false);
   const [preview2, setPreview2] = useState(false);
   const [picture, setPicture] = useState([]);
@@ -57,55 +58,6 @@ const Pemilihan = ({route}) => {
   const pilihKandidat = (key) => {
     setPilihan(key);
     console.log('PILIH');
-  };
-
-  const takePicture = async () => {
-    showActionButton(0);
-    console.log('picture pressed');
-    if (camera) {
-      console.log('OK - camera');
-      const options = {quality: 0.2, base64: true, mirrorImage: false};
-      const data = await camera.takePictureAsync(options);
-      if (data) {
-        setShowCam(false);
-        if (step == 0) {
-          setPreview(true);
-          setPicture(data);
-          setActionButton(
-            <HButton
-              label="LANJUTKAN"
-              onPress={() => {
-                setStep(1);
-                setShowCam(true);
-                setPreview(false);
-              }}
-              // console.log(refresh);
-            />,
-          );
-        } else if (step == 1) {
-          setPreview2(true);
-          setPicture2(data);
-          setActionButton(
-            <HButton
-              label="LANJUTKAN"
-              onPress={() => {
-                setStep(2);
-                setShowCam(false);
-                setPreview2(false);
-                console.log('===SETPICTURE');
-                console.log(picture.uri);
-                console.log(picture2.uri);
-                console.log('###SETPICTURE');
-              }}
-              // console.log(refresh);
-            />,
-          );
-        }
-      }
-    } else {
-      console.log('NOT OK - camera');
-      showActionButton(1);
-    }
   };
 
   const showActionButton = (show) => {
@@ -179,6 +131,57 @@ const Pemilihan = ({route}) => {
     });
   }
 
+  const takePicture = async () => {
+    showActionButton(0);
+    console.log('picture pressed');
+    if (camera) {
+      console.log('OK - camera');
+      const options = {quality: 0.2, base64: true, mirrorImage: false};
+      const data = await camera.takePictureAsync(options);
+      if (data) {
+        setShowCam2(false);
+        setShowCam(false);
+        if (step == 0) {
+          setPreview(true);
+          setPicture(data);
+          setActionButton(
+            <HButton
+              label="LANJUTKAN"
+              onPress={() => {
+                setStep(1);
+                setShowCam(false);
+                setShowCam2(true);
+                setPreview(false);
+              }}
+              // console.log(refresh);
+            />,
+          );
+        } else if (step == 1) {
+          setPreview2(true);
+          setPicture2(data);
+          setActionButton(
+            <HButton
+              label="LANJUTKAN"
+              onPress={() => {
+                setStep(2);
+                setShowCam2(false);
+                setPreview2(false);
+                console.log('===SETPICTURE');
+                console.log(picture.uri);
+                console.log(picture2.uri);
+                console.log('###SETPICTURE');
+              }}
+              // console.log(refresh);
+            />,
+          );
+        }
+      }
+    } else {
+      console.log('NOT OK - camera');
+      showActionButton(1);
+    }
+  };
+
   useEffect(() => {
     if (route.params?.loaded) {
       // setStep(1);
@@ -217,8 +220,10 @@ const Pemilihan = ({route}) => {
                         console.log(res);
                       });
                   } else {
-                    setStep(0);
-                    setShowCam(true);
+                    if (step == 5) {
+                      setStep(0);
+                      setShowCam(true);
+                    }
                     showCamera('TRIGGER SHOW CAMERA');
                     showActionButton(1);
                     console.log('Masih Login.');
@@ -305,11 +310,41 @@ const Pemilihan = ({route}) => {
             }
           }}
           style={styles.preview}
-          type={
-            step == 0
-              ? RNCamera.Constants.Type.front
-              : RNCamera.Constants.Type.back
-          }
+          type={RNCamera.Constants.Type.front}
+          // flashMode={RNCamera.Constants.FlashMode.on}
+          // faceDetectionMode={RNCamera.Constants.FaceDetection.Mode.accurate}
+          // onFacesDetected={(data) => console.log(data)}
+          androidCameraPermissionOptions={{
+            title: 'Permission to use camera',
+            message: 'We need your permission to use your camera',
+            buttonPositive: 'Ok',
+            buttonNegative: 'Cancel',
+          }}
+          androidRecordAudioPermissionOptions={{
+            title: 'Permission to use audio recording',
+            message: 'We need your permission to use your audio',
+            buttonPositive: 'Ok',
+            buttonNegative: 'Cancel',
+          }}
+        />
+      )}
+      {showCam2 && (
+        <RNCamera
+          ref={(ref) => {
+            console.log('SETTED - camera');
+            setCamera(ref);
+            if (!camera) {
+              console.log('tidak ada camera');
+              navigation.navigate('Pemilihan', {
+                pemilihanReload: 1,
+                loaded: Math.random(),
+              });
+            } else {
+              console.log('ada kamera');
+            }
+          }}
+          style={styles.preview}
+          type={RNCamera.Constants.Type.back}
           // flashMode={RNCamera.Constants.FlashMode.on}
           // faceDetectionMode={RNCamera.Constants.FaceDetection.Mode.accurate}
           // onFacesDetected={(data) => console.log(data)}
@@ -356,7 +391,6 @@ const Pemilihan = ({route}) => {
           </View>
         </View>
       )}
-      {step == 1 && ElCamera}
       {step == 1 && (
         <View
           style={{
