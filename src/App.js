@@ -64,10 +64,11 @@ const App = () => {
       xhr.onerror = reject;
     });
   };
-  const sendTokenFB = (token) => {
+  const sendTokenFB = (token, url) => {
     console.log('sendtokenfb');
     console.log('Kirim ke DB');
-    ajax(getUrl + 'mobile/api', {
+    console.log(url);
+    ajax(url + 'mobile/api', {
       operation: 'deviceTokenStore',
       tokenFB: token,
     })
@@ -103,8 +104,9 @@ const App = () => {
               getByKey('tokenFB', false)
                 .then(function (res) {
                   if (!res) {
-                    sendTokenFB(token);
                   }
+                  console.log('sendtoken');
+                  sendTokenFB(token, res_url.URL);
                   console.log('GBK ' + res);
                 })
                 .catch(function (res) {
