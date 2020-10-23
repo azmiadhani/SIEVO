@@ -30,6 +30,7 @@ const Kandidat = (props) => {
                 : {},
             ]}
             value={item.kandidatId}
+            disabled={props.disabled}
             onPress={() => props.onChange(item.kandidatId)}>
             <View style={styles.textContainer}>
               <Text style={[styles.item, styles.itemBold, {fontSize: 50}]}>

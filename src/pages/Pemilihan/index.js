@@ -9,6 +9,7 @@ import {
   ImageBackground,
   Image,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import {checkLogin, getByKey, storeData} from '../../Utils/asyncstorage';
 import {HAlert} from '../../Utils/HAlert';
@@ -184,7 +185,7 @@ const Pemilihan = ({route}) => {
 
   useEffect(() => {
     if (route.params?.loaded) {
-      // setStep(1);
+      // setStep(2);
       // ENABLE LATER
       console.log('TAB - Pemilihan');
       setPilihan('');
@@ -428,6 +429,7 @@ const Pemilihan = ({route}) => {
               terpilih={pilihan}
               onChange={pilihKandidat}
               URL={route.params.URL}
+              disabled={simpan ? false : true}
             />
           </MainContentPemilihan>
           <View style={{alignItems: 'center', paddingTop: windowWidth * 0.05}}>
@@ -467,10 +469,24 @@ const Pemilihan = ({route}) => {
                     })
                     .catch(function (res) {
                       console.log(res);
+                      HAlert(
+                        'Gagal',
+                        'Terjadi kesalahan saat menghubungi server.',
+                      );
+
                       setSimpan(true);
                     });
                 }}
               />
+              {simpan ? (
+                <Text>
+                  Setelah anda menekan tombol simpan anda tidak bisa merubah
+                  suara lagi.
+                </Text>
+              ) : (
+                // <Text>Sedang menyimpan mohon menunggu</Text>
+                <ActivityIndicator size="large" color="#000000" />
+              )}
             </View>
           </View>
         </>
@@ -522,5 +538,14 @@ const styles = StyleSheet.create({
   },
   realFooter: {
     width: windowWidth * 0.8,
+  },
+  loading: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
