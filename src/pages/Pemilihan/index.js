@@ -7,6 +7,8 @@ import {
   ImageBackground,
   Dimensions,
   ScrollView,
+  ActivityIndicator,
+  Alert,
 } from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
@@ -22,6 +24,7 @@ import {
   MainContentBerkala,
 } from '../../components';
 import {checkLogin, getByKey, storeData} from '../../Utils/asyncstorage';
+import {HAlert} from '../../Utils/HAlert';
 import axios from 'axios';
 
 const Pemilihan = ({route}) => {
@@ -40,6 +43,40 @@ const Pemilihan = ({route}) => {
 
   const [step, setStep] = useState();
 
+  const [token, setToken] = useState();
+  const [sudahMemilih, setSudahMemilih] = useState();
+
+  // Step 2
+  const [dataKandidat, setDataKandidat] = useState([]);
+  const [pilihan, setPilihan] = useState('');
+  const [simpan, setSimpan] = useState(true);
+
+  // Step 3
+  const [dataBerkala, setDataBerkala] = useState([]);
+
+  const submit_ajax = (url) => {
+    // resource : https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
+    // `delay` returns a promise
+    console.log('submit_ajax');
+
+    return new Promise(function (resolve, reject) {
+      // Only `delay` is able to resolve or reject the promise
+      var fd = new FormData();
+      fd.append('token', token);
+      fd.append('operation', 'submit_pilihan');
+      fd.append('pilihanKandidatid', pilihan);
+      fd.append('pilihanFoto', picture1.base64);
+      fd.append('pilihanFotoBerkas', picture2.base64);
+      axios
+        .post(url, fd)
+        .then(function (response) {
+          resolve(response.data);
+        })
+        .catch(function (error) {
+          reject(error);
+        });
+    });
+  };
   const takePicture = async () => {
     if (camera) {
       setCapturing(true);
@@ -50,9 +87,9 @@ const Pemilihan = ({route}) => {
       setImageUri(data.uri);
       setHideCamera(true);
       if (step == 0) {
-        setPicture1(data.uri);
+        setPicture1(data);
       } else if (step == 1) {
-        setPicture2(data.uri);
+        setPicture2(data);
       }
       setCapturing(false);
     } else {
@@ -82,8 +119,32 @@ const Pemilihan = ({route}) => {
       setImageUri(false);
       setHideCamera(true);
       setHideActionView(true);
-      console.log('picture1 => ' + picture1);
-      console.log('picture2 => ' + picture2);
+      axios
+        .post(route.params.URL + 'mobile/api/', {
+          operation: 'getKandidat',
+          token: token,
+        })
+        .then(function (response) {
+          setDataKandidat(response.data.listKandidat);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } else if (step == 3) {
+      setImageUri(false);
+      setHideCamera(true);
+      setHideActionView(true);
+      axios
+        .post(route.params.URL + 'mobile/api/', {
+          operation: 'pilihanBerkala',
+          token: token,
+        })
+        .then(function (response) {
+          setDataBerkala(response.data.listBerkala);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     }
     setRefresh(Math.random());
   }, [step]);
@@ -92,7 +153,35 @@ const Pemilihan = ({route}) => {
     React.useCallback(() => {
       // Do something when the screen is focused
       console.log('=== Tab Pemilihan ===');
-      setStep(0);
+      getByKey('token', false)
+        .then(function (res) {
+          if (res) {
+            setToken(res);
+            getByKey('sudah_memilih', false)
+              .then(function (res_sudah) {
+                if (res_sudah) {
+                  if (res_sudah == 'sudah') {
+                    setSudahMemilih(true);
+                    setStep(3);
+                  } else {
+                    console.log('BELUM');
+                    setSudahMemilih(false);
+                    setStep(0); // original --> 0
+                  }
+                } else {
+                  navigation.replace('Login');
+                }
+              })
+              .catch(function (res) {
+                console.log(res);
+              });
+          } else {
+            navigation.replace('Login');
+          }
+        })
+        .catch(function (res) {
+          console.log(res);
+        });
       return () => {
         // Do something when the screen is unfocused
         // Useful for cleanup functions
@@ -113,33 +202,34 @@ const Pemilihan = ({route}) => {
           />
         </View>
       ) : null}
-      <RNCamera
-        ref={(ref) => {
-          setCamera(ref);
-        }}
-        style={[styles.preview, {display: HideCamera ? 'none' : 'flex'}]}
-        type={
-          step == 0
-            ? RNCamera.Constants.Type.front
-            : step == 1
-            ? RNCamera.Constants.Type.back
-            : RNCamera.Constants.Type.back
-        }
-        flashMode={RNCamera.Constants.FlashMode.on}
-        androidCameraPermissionOptions={{
-          title: 'Permission to use camera',
-          message: 'We need your permission to use your camera',
-          buttonPositive: 'Ok',
-          buttonNegative: 'Cancel',
-        }}
-        androidRecordAudioPermissionOptions={{
-          title: 'Permission to use audio recording',
-          message: 'We need your permission to use your audio',
-          buttonPositive: 'Ok',
-          buttonNegative: 'Cancel',
-        }}
-      />
-
+      {HideCamera ? null : (
+        <RNCamera
+          ref={(ref) => {
+            setCamera(ref);
+          }}
+          style={[styles.preview, {display: HideCamera ? 'none' : 'flex'}]}
+          type={
+            step == 0
+              ? RNCamera.Constants.Type.front
+              : step == 1
+              ? RNCamera.Constants.Type.back
+              : RNCamera.Constants.Type.back
+          }
+          flashMode={RNCamera.Constants.FlashMode.on}
+          androidCameraPermissionOptions={{
+            title: 'Permission to use camera',
+            message: 'We need your permission to use your camera',
+            buttonPositive: 'Ok',
+            buttonNegative: 'Cancel',
+          }}
+          androidRecordAudioPermissionOptions={{
+            title: 'Permission to use audio recording',
+            message: 'We need your permission to use your audio',
+            buttonPositive: 'Ok',
+            buttonNegative: 'Cancel',
+          }}
+        />
+      )}
       <View
         style={{
           flex: 1,
@@ -175,6 +265,82 @@ const Pemilihan = ({route}) => {
           </ScrollView>
         </View>
       </View>
+      {step == 2 ? (
+        <>
+          <MainContentPemilihan>
+            <Kandidat
+              dataKandidat={dataKandidat}
+              terpilih={pilihan}
+              onChange={(key) => {
+                setPilihan(key);
+              }}
+              URL={route.params.URL}
+              disabled={simpan ? false : true}
+            />
+          </MainContentPemilihan>
+          <View style={{alignItems: 'center', paddingTop: windowWidth * 0.05}}>
+            <View style={styles.realFooter}>
+              <HButton
+                label="SIMPAN PILIHAN"
+                disabled={pilihan ? (simpan ? false : true) : true}
+                onPress={() => {
+                  setSimpan(false);
+                  submit_ajax(route.params.URL + 'mobile/api_fd/')
+                    .then(function (res2) {
+                      console.log(res2);
+                      if (res2.status) {
+                        storeData('sudah_memilih', 'sudah');
+                        Alert.alert(
+                          '',
+                          res2.keterangan,
+                          [
+                            {
+                              text: 'OK',
+                              onPress: () => {
+                                setStep(3);
+                              },
+                            },
+                          ],
+                          {
+                            cancelable: false,
+                          },
+                        );
+                      } else {
+                        HAlert('Gagal', res2.keterangan);
+                      }
+                      setSimpan(true);
+                    })
+                    .catch(function (res) {
+                      console.log(res);
+                      HAlert(
+                        'Gagal',
+                        'Terjadi kesalahan saat menghubungi server.',
+                      );
+
+                      setSimpan(true);
+                    });
+                }}
+              />
+              {simpan ? (
+                <Text>
+                  Setelah anda menekan tombol simpan anda tidak bisa merubah
+                  suara lagi.
+                </Text>
+              ) : (
+                // <Text>Sedang menyimpan mohon menunggu</Text>
+                <ActivityIndicator size="large" color="#000000" />
+              )}
+            </View>
+          </View>
+        </>
+      ) : null}
+      {step == 3 ? (
+        <View>
+          <MainContentBerkala headerText="Status Pemilihan">
+            <KandidatBerkala data={dataBerkala} URL={route.params.URL} />
+          </MainContentBerkala>
+        </View>
+      ) : null}
     </View>
   );
 };
