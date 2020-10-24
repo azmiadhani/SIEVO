@@ -30,8 +30,8 @@ import axios from 'axios';
 const Pemilihan = ({route}) => {
   const navigation = useNavigation();
   const [camera, setCamera] = useState();
-  const [HideCamera, setHideCamera] = useState(false);
-  const [HideActionView, setHideActionView] = useState(false);
+  const [HideCamera, setHideCamera] = useState(true);
+  const [HideActionView, setHideActionView] = useState(true);
   const [capturing, setCapturing] = useState(false);
   const [imageUri, setImageUri] = useState();
   const [picture1, setPicture1] = useState();
@@ -104,6 +104,8 @@ const Pemilihan = ({route}) => {
   useEffect(() => {
     console.log('==> STEP ' + step);
     if (step == 0) {
+      setHideCamera(false);
+      setHideActionView(false);
       setAmbilFotoDeskripsi(
         'Pastikan Wajah & KTM/Profil SIMARI anda terlihat dengan jelas dan tidak blur agar pihak panitia bisa mem-verifikasi bahwa anda adalah pemilih valid.',
       );
@@ -153,27 +155,45 @@ const Pemilihan = ({route}) => {
     React.useCallback(() => {
       // Do something when the screen is focused
       console.log('=== Tab Pemilihan ===');
+      setStep(4);
       getByKey('token', false)
         .then(function (res) {
           if (res) {
-            setToken(res);
-            getByKey('sudah_memilih', false)
-              .then(function (res_sudah) {
-                if (res_sudah) {
-                  if (res_sudah == 'sudah') {
-                    setSudahMemilih(true);
-                    setStep(3);
-                  } else {
-                    console.log('BELUM');
-                    setSudahMemilih(false);
-                    setStep(0); // original --> 0
-                  }
+            axios
+              .post(route.params.URL + 'mobile/api/', {
+                operation: 'checkPeriode',
+                token: token,
+              })
+              .then(function (response) {
+                if (response) {
+                  setToken(res);
+                  getByKey('sudah_memilih', false)
+                    .then(function (res_sudah) {
+                      if (res_sudah) {
+                        if (
+                          res_sudah == 'sudah' ||
+                          response.data.list == false
+                        ) {
+                          setSudahMemilih(true);
+                          setStep(3);
+                        } else {
+                          console.log('BELUM');
+                          setSudahMemilih(false);
+                          setStep(0); // original --> 0
+                        }
+                      } else {
+                        navigation.replace('Login');
+                      }
+                    })
+                    .catch(function (res) {
+                      console.log(res);
+                    });
                 } else {
-                  navigation.replace('Login');
+                  console.log('Terjadi kesalahan pada koneksi');
                 }
               })
-              .catch(function (res) {
-                console.log(res);
+              .catch(function (error) {
+                console.log(error);
               });
           } else {
             navigation.replace('Login');

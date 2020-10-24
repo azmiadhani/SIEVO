@@ -13,7 +13,6 @@ import {RaiseHand} from '../../assets';
 import {URL_DOMAIN} from '../../Utils/constant';
 
 const KandidatBerkala = (props) => {
-  console.log(props);
   return (
     <View
       style={{
