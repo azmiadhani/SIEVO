@@ -1,20 +1,15 @@
-import React, {useEffect, useState, PureComponent} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
-  View,
   TouchableOpacity,
-  Dimensions,
-  SafeAreaView,
+  View,
   ImageBackground,
-  Image,
-  Alert,
-  ActivityIndicator,
+  Dimensions,
+  ScrollView,
 } from 'react-native';
-import {checkLogin, getByKey, storeData} from '../../Utils/asyncstorage';
-import {HAlert} from '../../Utils/HAlert';
-import {useNavigation, CommonActions} from '@react-navigation/native';
 import {RNCamera} from 'react-native-camera';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import {
   MainContent,
   HField,
@@ -26,482 +21,148 @@ import {
   MainContentPemilihan,
   MainContentBerkala,
 } from '../../components';
-import {ScrollView} from 'react-native-gesture-handler';
-import axios from 'axios';
-import jwt_decode from 'jwt-decode';
 
 const Pemilihan = ({route}) => {
-  const navigation = useNavigation();
   const [camera, setCamera] = useState();
-  const [showCam, setShowCam] = useState(false);
-  const [showCam2, setShowCam2] = useState(false);
-  const [preview, setPreview] = useState(false);
-  const [preview2, setPreview2] = useState(false);
-  const [picture, setPicture] = useState([]);
-  const [picture2, setPicture2] = useState([]);
+  const [HideCamera, setHideCamera] = useState(false);
+  const [imageUri, setImageUri] = useState();
+  const [picture1, setPicture1] = useState();
+  const [picture2, setPicture2] = useState();
 
-  // component
-  const [step, setStep] = useState(5);
-  const [ElCamera, setElCamera] = useState(<View></View>);
-  const [ActionButton, setActionButton] = useState(<View></View>);
+  const [ActionButton, setActionButton] = useState();
+  const [ActionButtonLabel, setActionButtonLabel] = useState();
+  const [AmbilFotoDeskripsi, setAmbilFotoDeskripsi] = useState();
+  const [AmbilFotoLabel, setAmbilFotoLabel] = useState();
+  const [refresh, setRefresh] = useState();
 
-  // Data Kandidat
-  const [dataKandidat, setDataKandidat] = useState([]);
-  const [pilihan, setPilihan] = useState('');
-  const [token, setToken] = useState('');
-
-  // pilihan berkala
-  const [dataBerkala, setDataBerkala] = useState([]);
-
-  // Button Simpan
-  const [simpan, setSimpan] = useState(true);
-
-  const pilihKandidat = (key) => {
-    setPilihan(key);
-    console.log('PILIH');
-  };
-
-  const showActionButton = (show) => {
-    if (step == 0) {
-      var label = 'AMBIL FOTO SELFIE DENGAN KTM';
-    } else if (step == 1) {
-      var label = 'AMBIL FOTO KTM';
-    }
-    if (show) {
-      setActionButton(
-        <HButton
-          label={label}
-          onPress={takePicture.bind(this)}
-          // console.log(refresh);
-        />,
-      );
-    } else {
-      setActionButton(
-        <HButton
-          label={label}
-          disabled={true}
-          // console.log(refresh);
-        />,
-      );
-    }
-  };
-
-  const showCamera = (props) => {
-    console.log(props);
-  };
-
-  function ajax(url, pkg) {
-    // resource : https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
-    // `delay` returns a promise
-    return new Promise(function (resolve, reject) {
-      // Only `delay` is able to resolve or reject the promise
-      console.log(pkg);
-
-      var xhr = new XMLHttpRequest();
-      xhr.open('post', url, true);
-      xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-      xhr.send(JSON.stringify(pkg));
-      xhr.onload = function () {
-        resolve(this.response);
-      };
-      xhr.onerror = reject;
-    });
-  }
-
-  function submit_ajax(url) {
-    // resource : https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
-    // `delay` returns a promise
-    console.log('submit_ajax');
-
-    return new Promise(function (resolve, reject) {
-      // Only `delay` is able to resolve or reject the promise
-      var fd = new FormData();
-      fd.append('token', token);
-      fd.append('operation', 'submit_pilihan');
-      fd.append('pilihanKandidatid', pilihan);
-      fd.append('pilihanFoto', picture.base64);
-      fd.append('pilihanFotoBerkas', picture2.base64);
-      axios
-        .post(url, fd)
-        .then(function (response) {
-          resolve(response.data);
-        })
-        .catch(function (error) {
-          reject(error);
-        });
-    });
-  }
+  const [step, setStep] = useState();
 
   const takePicture = async () => {
-    showActionButton(0);
-    console.log('picture pressed');
     if (camera) {
-      console.log('OK - camera');
+      console.log('OK CAMERA');
       const options = {quality: 0.2, base64: true, mirrorImage: false};
       const data = await camera.takePictureAsync(options);
-      if (data) {
-        setShowCam2(false);
-        setShowCam(false);
-        if (step == 0) {
-          setPreview(true);
-          setPicture(data);
-          setActionButton(
-            <HButton
-              label="LANJUTKAN"
-              onPress={() => {
-                setStep(1);
-                setShowCam(false);
-                setShowCam2(true);
-                setPreview(false);
-              }}
-              // console.log(refresh);
-            />,
-          );
-        } else if (step == 1) {
-          setPreview2(true);
-          setPicture2(data);
-          setActionButton(
-            <HButton
-              label="LANJUTKAN"
-              onPress={() => {
-                setStep(2);
-                setShowCam2(false);
-                setPreview2(false);
-                console.log('===SETPICTURE');
-                console.log(picture.uri);
-                console.log(picture2.uri);
-                console.log('###SETPICTURE');
-              }}
-              // console.log(refresh);
-            />,
-          );
-        }
+      console.log(data.uri);
+      setImageUri(data.uri);
+      setHideCamera(true);
+      if (step == 0) {
+        setPicture1(data.uri);
+      } else if (step == 1) {
+        setPicture2(data.uri);
       }
     } else {
-      console.log('NOT OK - camera');
-      showActionButton(1);
+      console.log('NO CAMERA');
     }
   };
 
   useEffect(() => {
-    if (route.params?.loaded) {
-      // setStep(2);
-      // ENABLE LATER
-      console.log('TAB - Pemilihan');
-      setPilihan('');
-      setDataKandidat([]);
-      getByKey('token', false)
-        .then(function (res) {
-          if (res) {
-            setToken(res);
-            getByKey('sudah_memilih', false)
-              .then(function (res_sudah) {
-                if (res_sudah) {
-                  // setStep(1);
-                  console.log('SUDAH MEMILIH =', res_sudah);
-                  if (res_sudah == 'sudah') {
-                    setStep(3);
-                    console.log('Masih Login.');
-                    ajax(route.params.URL + 'mobile/api/', {
-                      operation: 'pilihanBerkala',
-                      token: res,
-                    })
-                      .then(function (res2) {
-                        res2 = JSON.parse(res2);
-                        console.log(res2.listBerkala);
-                        if (res2.listBerkala) {
-                          console.log('List Berkala Updated');
-                          setDataBerkala(res2.listBerkala);
-                        } else {
-                          // Tidak ada Kandidat
-                          console.log('Tidak ada List Berkala');
-                        }
-                      })
-                      .catch(function (res) {
-                        console.log(res);
-                      });
-                  } else {
-                    if (step == 5) {
-                      setStep(0);
-                      setShowCam(true);
-                    }
-                    showCamera('TRIGGER SHOW CAMERA');
-                    showActionButton(1);
-                    console.log('Masih Login.');
-                    ajax(route.params.URL + 'mobile/api/', {
-                      operation: 'getKandidat',
-                      token: res,
-                    })
-                      .then(function (res2) {
-                        res2 = JSON.parse(res2);
-                        // console.log(res);
-                        if (res2.listKandidat) {
-                          console.log('Kandidat Loaded');
-                          setDataKandidat(res2.listKandidat);
-                        } else {
-                          // Tidak ada Kandidat
-                          console.log('Tidak ada kandidat');
-                        }
-                      })
-                      .catch(function (res) {
-                        console.log(res);
-                      });
-                  }
-                } else {
-                  navigation.replace('Login');
-                  s;
-                }
-              })
-              .catch(function (res) {
-                console.log(res);
-              });
-          } else {
-            navigation.replace('Login');
-          }
-        })
-        .catch(function (res) {
-          console.log(res);
-        });
-    }
-  }, [route.params?.loaded]);
+    console.log('Refresh');
+  }, [refresh]);
 
-  const navi = (name, extraparam) => {
-    navigation.reset({
-      index: 0,
-      routes: [
-        {
-          name: name,
-          params: extraparam,
-        },
-      ],
-    });
-  };
+  useEffect(() => {
+    console.log('==> STEP ' + step);
+    if (step == 0) {
+      setAmbilFotoDeskripsi(
+        'Pastikan Wajah & KTM/Profil SIMARI anda terlihat dengan jelas dan tidak blur agar pihak panitia bisa mem-verifikasi bahwa anda adalah pemilih valid.',
+      );
+      setAmbilFotoLabel('AMBIL FOTO PERTAMA');
+    } else if (step == 1) {
+      setImageUri(false);
+      setHideCamera(false);
+      setAmbilFotoDeskripsi(
+        'Pastikan KTM/Profil SIMARI anda terlihat dengan jelas dan tidak blur agar pihak panitia bisa mem-verifikasi bahwa anda adalah pemilih valid.',
+      );
+      setAmbilFotoLabel('AMBIL FOTO KEDUA');
+    } else if (step == 2) {
+      console.log('picture1 => ' + picture1);
+      console.log('picture2 => ' + picture2);
+    }
+    setRefresh(Math.random());
+  }, [step]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Do something when the screen is focused
+      console.log('=== Tab Pemilihan ===');
+
+      setStep(0);
+      return () => {
+        // Do something when the screen is unfocused
+        // Useful for cleanup functions
+      };
+    }, []),
+  );
 
   return (
     <View style={styles.container}>
-      {preview && (
+      {imageUri ? (
         <View style={{flex: 2}}>
           <ImageBackground
-            source={{uri: picture.uri}}
+            source={{uri: imageUri}}
             style={{width: windowWidth, height: windowHeight * 0.7}}
           />
         </View>
-      )}
-      {preview2 && (
-        <View style={{flex: 2}}>
-          <ImageBackground
-            source={{uri: picture2.uri}}
-            style={{width: windowWidth, height: windowHeight * 0.7}}
-          />
-        </View>
-      )}
-      {showCam && (
-        <RNCamera
-          ref={(ref) => {
-            console.log('SETTED - camera');
-            setCamera(ref);
-            if (!camera) {
-              console.log('tidak ada camera');
-              navigation.navigate('Pemilihan', {
-                pemilihanReload: 1,
-                loaded: Math.random(),
-              });
-            } else {
-              console.log('ada kamera');
-            }
-          }}
-          style={styles.preview}
-          type={RNCamera.Constants.Type.front}
-          // flashMode={RNCamera.Constants.FlashMode.on}
-          // faceDetectionMode={RNCamera.Constants.FaceDetection.Mode.accurate}
-          // onFacesDetected={(data) => console.log(data)}
-          androidCameraPermissionOptions={{
-            title: 'Permission to use camera',
-            message: 'We need your permission to use your camera',
-            buttonPositive: 'Ok',
-            buttonNegative: 'Cancel',
-          }}
-          androidRecordAudioPermissionOptions={{
-            title: 'Permission to use audio recording',
-            message: 'We need your permission to use your audio',
-            buttonPositive: 'Ok',
-            buttonNegative: 'Cancel',
-          }}
-        />
-      )}
-      {showCam2 && (
-        <RNCamera
-          ref={(ref) => {
-            console.log('SETTED - camera');
-            setCamera(ref);
-            if (!camera) {
-              console.log('tidak ada camera');
-              navigation.navigate('Pemilihan', {
-                pemilihanReload: 1,
-                loaded: Math.random(),
-              });
-            } else {
-              console.log('ada kamera');
-            }
-          }}
-          style={styles.preview}
-          type={RNCamera.Constants.Type.back}
-          // flashMode={RNCamera.Constants.FlashMode.on}
-          // faceDetectionMode={RNCamera.Constants.FaceDetection.Mode.accurate}
-          // onFacesDetected={(data) => console.log(data)}
-          androidCameraPermissionOptions={{
-            title: 'Permission to use camera',
-            message: 'We need your permission to use your camera',
-            buttonPositive: 'Ok',
-            buttonNegative: 'Cancel',
-          }}
-          androidRecordAudioPermissionOptions={{
-            title: 'Permission to use audio recording',
-            message: 'We need your permission to use your audio',
-            buttonPositive: 'Ok',
-            buttonNegative: 'Cancel',
-          }}
-        />
-      )}
-      {step == 0 && (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            backgroundColor: '#ffffff',
-            borderRadius: 15,
-          }}>
-          <View style={{paddingTop: 40}}>
-            <ScrollView>
-              <View
-                style={{paddingRight: 30, paddingLeft: 30, paddingBottom: 40}}>
-                {ActionButton}
-                <Text
-                  style={{
-                    fontFamily: 'Cabin-Regular',
-                    fontSize: 14,
-                    textAlign: 'center',
-                    paddingTop: 20,
-                  }}>
-                  Pastikan Wajah & KTM/Profil SIMARI anda terlihat dengan jelas
-                  dan tidak blur agar pihak panitia bisa mem-verifikasi bahwa
-                  anda adalah pemilih valid.
-                </Text>
-              </View>
-            </ScrollView>
-          </View>
-        </View>
-      )}
-      {step == 1 && (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            backgroundColor: '#ffffff',
-            borderRadius: 15,
-          }}>
-          <View style={{paddingTop: 40}}>
-            <ScrollView>
-              <View
-                style={{paddingRight: 30, paddingLeft: 30, paddingBottom: 40}}>
-                {ActionButton}
-                <Text
-                  style={{
-                    fontFamily: 'Cabin-Regular',
-                    fontSize: 14,
-                    textAlign: 'center',
-                    paddingTop: 20,
-                  }}>
-                  Pastikan KTM/Profil SIMARI anda terlihat dengan jelas dan
-                  tidak blur agar pihak panitia bisa mem-verifikasi bahwa anda
-                  adalah pemilih valid.
-                </Text>
-              </View>
-            </ScrollView>
-          </View>
-        </View>
-      )}
-      {step == 2 && (
-        <>
-          <MainContentPemilihan>
-            <Kandidat
-              dataKandidat={dataKandidat}
-              terpilih={pilihan}
-              onChange={pilihKandidat}
-              URL={route.params.URL}
-              disabled={simpan ? false : true}
-            />
-          </MainContentPemilihan>
-          <View style={{alignItems: 'center', paddingTop: windowWidth * 0.05}}>
-            <View style={styles.realFooter}>
-              <HButton
-                label="SIMPAN PILIHAN"
-                disabled={pilihan ? (simpan ? false : true) : true}
-                onPress={() => {
-                  setSimpan(false);
-                  submit_ajax(route.params.URL + 'mobile/api_fd/')
-                    .then(function (res2) {
-                      console.log(res2);
-                      if (res2.status) {
-                        storeData('sudah_memilih', 'sudah');
-                        Alert.alert(
-                          '',
-                          res2.keterangan,
-                          [
-                            {
-                              text: 'OK',
-                              onPress: () => {
-                                navigation.navigate('Pemilihan', {
-                                  pemilihanReload: 1,
-                                  loaded: Math.random(),
-                                });
-                              },
-                            },
-                          ],
-                          {
-                            cancelable: false,
-                          },
-                        );
-                      } else {
-                        HAlert('Gagal', res2.keterangan);
-                      }
-                      setSimpan(true);
-                    })
-                    .catch(function (res) {
-                      console.log(res);
-                      HAlert(
-                        'Gagal',
-                        'Terjadi kesalahan saat menghubungi server.',
-                      );
+      ) : null}
+      <RNCamera
+        ref={(ref) => {
+          setCamera(ref);
+        }}
+        style={[styles.preview, {display: HideCamera ? 'none' : 'flex'}]}
+        type={
+          step == 0
+            ? RNCamera.Constants.Type.front
+            : step == 1
+            ? RNCamera.Constants.Type.back
+            : RNCamera.Constants.Type.back
+        }
+        flashMode={RNCamera.Constants.FlashMode.on}
+        androidCameraPermissionOptions={{
+          title: 'Permission to use camera',
+          message: 'We need your permission to use your camera',
+          buttonPositive: 'Ok',
+          buttonNegative: 'Cancel',
+        }}
+        androidRecordAudioPermissionOptions={{
+          title: 'Permission to use audio recording',
+          message: 'We need your permission to use your audio',
+          buttonPositive: 'Ok',
+          buttonNegative: 'Cancel',
+        }}
+      />
 
-                      setSimpan(true);
-                    });
-                }}
-              />
-              {simpan ? (
-                <Text>
-                  Setelah anda menekan tombol simpan anda tidak bisa merubah
-                  suara lagi.
-                </Text>
-              ) : (
-                // <Text>Sedang menyimpan mohon menunggu</Text>
-                <ActivityIndicator size="large" color="#000000" />
-              )}
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          backgroundColor: '#ffffff',
+          borderRadius: 15,
+        }}>
+        <View style={{paddingTop: 40}}>
+          <ScrollView>
+            <View
+              style={{paddingRight: 30, paddingLeft: 30, paddingBottom: 40}}>
+              <View style={{display: imageUri ? 'none' : 'flex'}}>
+                <HButton label={AmbilFotoLabel} onPress={takePicture} />
+              </View>
+              <View style={{display: imageUri ? 'flex' : 'none'}}>
+                <HButton label="Lanjutkan" onPress={() => setStep(step + 1)} />
+              </View>
+              <Text
+                style={{
+                  fontFamily: 'Cabin-Regular',
+                  fontSize: 14,
+                  textAlign: 'center',
+                  paddingTop: 20,
+                }}>
+                {AmbilFotoDeskripsi}
+              </Text>
             </View>
-          </View>
-        </>
-      )}
-      {step == 3 && (
-        <View>
-          <MainContentBerkala headerText="Status Pemilihan">
-            <KandidatBerkala data={dataBerkala} URL={route.params.URL} />
-          </MainContentBerkala>
+          </ScrollView>
         </View>
-      )}
+      </View>
     </View>
   );
 };
-
 export default Pemilihan;
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
