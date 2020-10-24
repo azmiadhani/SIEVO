@@ -21,16 +21,19 @@ import {
   MainContentPemilihan,
   MainContentBerkala,
 } from '../../components';
+import {checkLogin, getByKey, storeData} from '../../Utils/asyncstorage';
+import axios from 'axios';
 
 const Pemilihan = ({route}) => {
+  const navigation = useNavigation();
   const [camera, setCamera] = useState();
   const [HideCamera, setHideCamera] = useState(false);
+  const [HideActionView, setHideActionView] = useState(false);
+  const [capturing, setCapturing] = useState(false);
   const [imageUri, setImageUri] = useState();
   const [picture1, setPicture1] = useState();
   const [picture2, setPicture2] = useState();
 
-  const [ActionButton, setActionButton] = useState();
-  const [ActionButtonLabel, setActionButtonLabel] = useState();
   const [AmbilFotoDeskripsi, setAmbilFotoDeskripsi] = useState();
   const [AmbilFotoLabel, setAmbilFotoLabel] = useState();
   const [refresh, setRefresh] = useState();
@@ -39,6 +42,7 @@ const Pemilihan = ({route}) => {
 
   const takePicture = async () => {
     if (camera) {
+      setCapturing(true);
       console.log('OK CAMERA');
       const options = {quality: 0.2, base64: true, mirrorImage: false};
       const data = await camera.takePictureAsync(options);
@@ -50,6 +54,7 @@ const Pemilihan = ({route}) => {
       } else if (step == 1) {
         setPicture2(data.uri);
       }
+      setCapturing(false);
     } else {
       console.log('NO CAMERA');
     }
@@ -74,6 +79,9 @@ const Pemilihan = ({route}) => {
       );
       setAmbilFotoLabel('AMBIL FOTO KEDUA');
     } else if (step == 2) {
+      setImageUri(false);
+      setHideCamera(true);
+      setHideActionView(true);
       console.log('picture1 => ' + picture1);
       console.log('picture2 => ' + picture2);
     }
@@ -84,11 +92,13 @@ const Pemilihan = ({route}) => {
     React.useCallback(() => {
       // Do something when the screen is focused
       console.log('=== Tab Pemilihan ===');
-
       setStep(0);
       return () => {
         // Do something when the screen is unfocused
         // Useful for cleanup functions
+        console.log('=== Tab Pemilihan UNFOCUSING ===');
+        setStep(0);
+        setHideCamera(true);
       };
     }, []),
   );
@@ -136,13 +146,18 @@ const Pemilihan = ({route}) => {
           justifyContent: 'center',
           backgroundColor: '#ffffff',
           borderRadius: 15,
+          display: HideActionView ? 'none' : 'flex',
         }}>
         <View style={{paddingTop: 40}}>
           <ScrollView>
             <View
               style={{paddingRight: 30, paddingLeft: 30, paddingBottom: 40}}>
               <View style={{display: imageUri ? 'none' : 'flex'}}>
-                <HButton label={AmbilFotoLabel} onPress={takePicture} />
+                <HButton
+                  label={AmbilFotoLabel}
+                  disabled={capturing}
+                  onPress={takePicture}
+                />
               </View>
               <View style={{display: imageUri ? 'flex' : 'none'}}>
                 <HButton label="Lanjutkan" onPress={() => setStep(step + 1)} />
