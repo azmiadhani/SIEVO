@@ -5,7 +5,7 @@ import {HInput, HButton, AsyncTest} from '../../components';
 import {RaiseHand} from '../../assets';
 import jwt_decode from 'jwt-decode';
 import {getByKey, checkLogin} from '../../Utils/asyncstorage';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
 const Beranda = ({route}) => {
   const navigation = useNavigation();
   const [nama, setNama] = useState('');
@@ -16,8 +16,6 @@ const Beranda = ({route}) => {
     // `delay` returns a promise
     return new Promise(function (resolve, reject) {
       // Only `delay` is able to resolve or reject the promise
-      console.log(pkg);
-
       var xhr = new XMLHttpRequest();
       xhr.open('post', url, true);
       xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
@@ -28,27 +26,23 @@ const Beranda = ({route}) => {
       xhr.onerror = reject;
     });
   }
-
-  useEffect(() => {
-    if (route.params?.loaded) {
+  useFocusEffect(
+    React.useCallback(() => {
+      // Do something when the screen is focused
       console.log('TAB - Beranda');
       getByKey('token', false)
         .then(function (res) {
           if (res) {
-            console.log('Masih Login.');
             ajax(route.params.URL + 'mobile/api/', {
               operation: 'getBerita',
               token: res,
             })
               .then(function (res2) {
                 res2 = JSON.parse(res2);
-                console.log(res2.list);
                 if (res2.list) {
-                  console.log('Lists Updated');
                   setBerita(res2.list);
                   setIsBusy(false);
                 } else {
-                  // Tidak ada Kandidat
                   console.log('Tidak ada List');
                 }
               })
@@ -62,23 +56,13 @@ const Beranda = ({route}) => {
         .catch(function (res) {
           console.log(res);
         });
-    }
-  }, [route.params?.loaded]);
-  useEffect(() => {
-    getByKey('token', false)
-      .then(function (res) {
-        let res_enc = res;
-        if (res) {
-          res = jwt_decode(res);
-          if (res.data.nama) {
-            setNama(res.data.nama + route.params.URL);
-          }
-        }
-      })
-      .catch(function (res) {
-        console.log(res);
-      });
-  }, []);
+      return () => {
+        // Do something when the screen is unfocused
+        // Useful for cleanup functions
+      };
+    }, []),
+  );
+
   return (
     <MainContent headerText="Beranda">
       {/* <AsyncTest /> */}
