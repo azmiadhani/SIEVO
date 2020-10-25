@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   // Header End
   //   Body
   scrollView: {
-    height: windowHeight * 0.65,
+    height: windowHeight * 0.63,
     paddingTop: 10,
   },
   body: {

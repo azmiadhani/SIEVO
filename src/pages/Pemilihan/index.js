@@ -298,60 +298,63 @@ const Pemilihan = ({route}) => {
               disabled={simpan ? false : true}
             />
           </MainContentPemilihan>
-          <View style={{alignItems: 'center', paddingTop: windowWidth * 0.05}}>
-            <View style={styles.realFooter}>
-              <HButton
-                label="SIMPAN PILIHAN"
-                disabled={pilihan ? (simpan ? false : true) : true}
-                onPress={() => {
-                  setSimpan(false);
-                  submit_ajax(route.params.URL + 'mobile/api_fd/')
-                    .then(function (res2) {
-                      console.log(res2);
-                      if (res2.status) {
-                        storeData('sudah_memilih', 'sudah');
-                        Alert.alert(
-                          '',
-                          res2.keterangan,
-                          [
-                            {
-                              text: 'OK',
-                              onPress: () => {
-                                setStep(3);
+          <ScrollView>
+            <View
+              style={{alignItems: 'center', paddingTop: windowWidth * 0.05}}>
+              <View style={styles.realFooter}>
+                <HButton
+                  label="SIMPAN PILIHAN"
+                  disabled={pilihan ? (simpan ? false : true) : true}
+                  onPress={() => {
+                    setSimpan(false);
+                    submit_ajax(route.params.URL + 'mobile/api_fd/')
+                      .then(function (res2) {
+                        console.log(res2);
+                        if (res2.status) {
+                          storeData('sudah_memilih', 'sudah');
+                          Alert.alert(
+                            '',
+                            res2.keterangan,
+                            [
+                              {
+                                text: 'OK',
+                                onPress: () => {
+                                  setStep(3);
+                                },
                               },
+                            ],
+                            {
+                              cancelable: false,
                             },
-                          ],
-                          {
-                            cancelable: false,
-                          },
+                          );
+                        } else {
+                          HAlert('Gagal', res2.keterangan);
+                        }
+                        setSimpan(true);
+                      })
+                      .catch(function (res) {
+                        console.log(res);
+                        HAlert(
+                          'Gagal',
+                          'Terjadi kesalahan saat menghubungi server.',
                         );
-                      } else {
-                        HAlert('Gagal', res2.keterangan);
-                      }
-                      setSimpan(true);
-                    })
-                    .catch(function (res) {
-                      console.log(res);
-                      HAlert(
-                        'Gagal',
-                        'Terjadi kesalahan saat menghubungi server.',
-                      );
 
-                      setSimpan(true);
-                    });
-                }}
-              />
-              {simpan ? (
-                <Text>
-                  Setelah anda menekan tombol simpan anda tidak bisa merubah
-                  suara lagi.
-                </Text>
-              ) : (
-                // <Text>Sedang menyimpan mohon menunggu</Text>
-                <ActivityIndicator size="large" color="#000000" />
-              )}
+                        setSimpan(true);
+                      });
+                  }}
+                />
+                {simpan ? (
+                  <Text>
+                    Setelah anda menekan tombol simpan anda tidak bisa merubah
+                    suara lagi.
+                  </Text>
+                ) : (
+                  // <Text>Sedang menyimpan mohon menunggu</Text>
+                  <ActivityIndicator size="large" color="#000000" />
+                )}
+              </View>
             </View>
-          </View>
+          </ScrollView>
         </>
       ) : null}
       {step == 3 ? (
