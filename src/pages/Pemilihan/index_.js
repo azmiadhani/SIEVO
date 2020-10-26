@@ -207,7 +207,7 @@ const Pemilihan = ({route}) => {
                       token: res,
                     })
                       .then(function (res2) {
-                        vres2 = JSON.parse(res2);
+                        res2 = JSON.parse(res2);
                         console.log(res2.listBerkala);
                         if (res2.listBerkala) {
                           console.log('List Berkala Updated');
