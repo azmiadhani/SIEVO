@@ -7,6 +7,9 @@ import {
   View,
   ImageBackground,
   Image,
+  PermissionsAndroid,
+  Platform,
+  Alert,
 } from 'react-native';
 import {SplashBackground, Logo, MainLogo, LogoKPUBawaslu} from '../../assets';
 import {LoginModal} from '../../components/';
@@ -16,18 +19,87 @@ import {
   removeAllData,
   getAllKeys,
 } from '../../Utils/asyncstorage';
+import GetLocation from 'react-native-get-location';
 const Login = ({navigation}) => {
+  const checkPermission = async () => {
+    try {
+      console.log('request permission');
+      const camera = await PermissionsAndroid.check(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+      );
+      const record = await PermissionsAndroid.check(
+        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+      );
+      const location = await PermissionsAndroid.check(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      );
+      const perm = [];
+      if (!camera) {
+        perm.push(PermissionsAndroid.PERMISSIONS.CAMERA);
+      }
+      if (!record) {
+        perm.push(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO);
+      }
+      if (!location) {
+        perm.push(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+      }
+      return perm;
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+  const requestPermissionCamera = (perm) => {
+    Alert.alert(
+      'Izinkan Akses',
+      'Aplikasi PEMILU-M ULM memerlukan beberapa akses agar anda bisa melakukan pemilihan dan suara yang anda kirimkan bisa dinyatakan sah oleh pihak verifikator suara.',
+      [
+        {
+          text: 'OK',
+          onPress: async () => {
+            try {
+              console.log('request permission');
+              const granted = await PermissionsAndroid.requestMultiple(perm);
+              if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log('Access Accepted');
+              } else {
+                console.log('Denied');
+              }
+            } catch (err) {
+              console.warn(err);
+            }
+          },
+        },
+      ],
+      {
+        cancelable: false,
+      },
+    );
+  };
   useEffect(() => {
-    // getByKey('token').then(function (res) {
-    //   if(res){
-    //     // Jika token ada
-    //     navigation.replace('MainApp')
-    //   }
-    //  }).catch(function (res) {
-    //    console.log(res);
-    //  });
-    // setToken(getByKey('token'));
-    console.log('page loaded');
+    if (Platform.OS === 'android') {
+      checkPermission()
+        .then(function (res) {
+          console.log(res);
+          if (res.length !== 0) {
+            requestPermissionCamera(res);
+          }
+        })
+        .catch(function () {
+          console.log('Terjadi Kesalahan');
+        });
+    }
+    // GetLocation.getCurrentPosition({
+    //   enableHighAccuracy: true,
+    //   timeout: 15000,
+    // })
+    //   .then((location) => {
+    //     console.log(location);
+    //   })
+    //   .catch((error) => {
+    //     const {code, message} = error;
+    //     console.warn(code, message);
+    //   });
+    // console.log('page loaded');
   }, []);
   return (
     <SafeAreaView style={styles.background}>

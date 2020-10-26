@@ -26,6 +26,7 @@ import {
 import {checkLogin, getByKey, storeData} from '../../Utils/asyncstorage';
 import {HAlert} from '../../Utils/HAlert';
 import axios from 'axios';
+import GetLocation from 'react-native-get-location';
 
 const Pemilihan = ({route}) => {
   const navigation = useNavigation();
@@ -36,6 +37,8 @@ const Pemilihan = ({route}) => {
   const [imageUri, setImageUri] = useState();
   const [picture1, setPicture1] = useState();
   const [picture2, setPicture2] = useState();
+  const [longitude, setLongitude] = useState();
+  const [latitude, setLatitude] = useState();
 
   const [AmbilFotoDeskripsi, setAmbilFotoDeskripsi] = useState();
   const [AmbilFotoLabel, setAmbilFotoLabel] = useState();
@@ -67,6 +70,8 @@ const Pemilihan = ({route}) => {
       fd.append('pilihanKandidatid', pilihan);
       fd.append('pilihanFoto', picture1.base64);
       fd.append('pilihanFotoBerkas', picture2.base64);
+      fd.append('pilihanLatitude', latitude);
+      fd.append('pilihanLongitude', longitude);
       axios
         .post(url, fd)
         .then(function (response) {
@@ -104,6 +109,19 @@ const Pemilihan = ({route}) => {
   useEffect(() => {
     console.log('==> STEP ' + step);
     if (step == 0) {
+      GetLocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 15000,
+      })
+        .then((location) => {
+          console.log(location);
+          setLatitude(location.latitude);
+          setLongitude(location.longitude);
+        })
+        .catch((error) => {
+          const {code, message} = error;
+          console.warn(code, message);
+        });
       setHideCamera(false);
       setHideActionView(false);
       setAmbilFotoDeskripsi(
