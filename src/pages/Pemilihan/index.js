@@ -253,7 +253,6 @@ const Pemilihan = ({route}) => {
               ? RNCamera.Constants.Type.back
               : RNCamera.Constants.Type.back
           }
-          flashMode={RNCamera.Constants.FlashMode.on}
           androidCameraPermissionOptions={{
             title: 'Permission to use camera',
             message: 'We need your permission to use your camera',
