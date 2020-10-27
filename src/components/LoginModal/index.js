@@ -47,8 +47,8 @@ function ajax(url, pkg) {
 }
 const LoginModal = (props) => {
   const navigation = useNavigation();
-  const [user, setUsername] = useState('1611016110005');
-  const [pass, setPassword] = useState('jakarta12');
+  const [user, setUsername] = useState('');
+  const [pass, setPassword] = useState('');
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [text, setText] = useState('');
@@ -110,6 +110,7 @@ const LoginModal = (props) => {
                 'Gagal Masuk',
                 'Nomor Induk / Kata Sandi tidak boleh kosong',
               );
+              setSimpan(true);
               return 0;
             }
             ajax(URL_API_LOGIN + 'api/v1/auth', {

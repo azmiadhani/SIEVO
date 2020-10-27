@@ -25,7 +25,7 @@ const Splash = ({navigation}) => {
         .catch(function (res) {
           console.log(res);
         });
-    }, 500);
+    }, 1500);
   }, [navigation]);
   return (
     <View style={styles.background}>
