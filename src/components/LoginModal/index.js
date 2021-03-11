@@ -15,7 +15,6 @@ import {
   OutlinedTextField,
 } from '@ubaids/react-native-material-textfield';
 import {HInput, HButton, AsyncTest} from '../../components';
-import {URL_API_LOGIN} from '../../Utils/constant';
 import {
   storeData,
   getByKey,
@@ -113,60 +112,29 @@ const LoginModal = (props) => {
               setSimpan(true);
               return 0;
             }
-            ajax(URL_API_LOGIN + 'api/v1/auth', {
+            ajax(URL_DOMAIN + 'mobile/api/', {
+              operation: 'login',
               username: user,
               password: pass,
             })
-              .then(function (res) {
-                res = JSON.parse(res);
-                console.log(res);
-                if (res.token) {
-                  ajax(URL_DOMAIN + 'mobile/api/', {
-                    token: res.token,
-                    operation: 'login',
-                  })
-                    .then(function (res2) {
-                      res2 = JSON.parse(res2);
-                      console.log(res2);
-                      if (res2.status) {
-                        if (res2.token) {
-                          var res2_decoded = jwt_decode(res2.token);
-                          storeData(
-                            'sudah_memilih',
-                            res2_decoded.data.sudah_memilih ? 'sudah' : 'belum',
-                          );
-                          storeData('token', res2.token);
-                          setToken(res2.token);
-                          console.log(res2.token);
-                        } else {
-                          HAlert('Gagal Masuk', '');
-                        }
-                      } else {
-                        HAlert(
-                          'Gagal Masuk',
-                          'Anda adalah mahasiswa berstatus tidak aktif',
-                        );
-                      }
-                      setSimpan(true);
-                    })
-                    .catch(function (res) {
-                      console.log(res);
-                      Alert.alert(
-                        'Gagal',
-                        'Terjadi kesalahan saat menghubungi server, coba lagi',
-                        [
-                          {
-                            text: 'OK',
-                          },
-                        ],
-                        {
-                          cancelable: false,
-                        },
-                      );
-                      setSimpan(true);
-                    });
+              .then(function (res2) {
+                res2 = JSON.parse(res2);
+                console.log(res2);
+                if (res2.status) {
+                  if (res2.token) {
+                    var res2_decoded = jwt_decode(res2.token);
+                    storeData(
+                      'sudah_memilih',
+                      res2_decoded.data.sudah_memilih ? 'sudah' : 'belum',
+                    );
+                    storeData('token', res2.token);
+                    setToken(res2.token);
+                    console.log(res2.token);
+                  } else {
+                    HAlert('Gagal Masuk', '');
+                  }
                 } else {
-                  HAlert('Gagal Masuk', 'Nomor Induk / Kata Sandi salah.');
+                  HAlert('Gagal Masuk', res2.keterangan);
                 }
                 setSimpan(true);
               })

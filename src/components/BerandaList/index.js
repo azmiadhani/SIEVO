@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'Cabin-Regular',
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   timelineDeskripsi: {
     fontSize: 15,

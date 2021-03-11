@@ -54,7 +54,7 @@ const TimelineList = (props) => {
                   data={tableHead}
                   widthArr={widthArr}
                   style={styles.header}
-                  textStyle={styles.text}
+                  textStyle={styles.textHeader}
                 />
               </Table>
               <ScrollView style={styles.dataWrapper}>
@@ -68,7 +68,7 @@ const TimelineList = (props) => {
                         styles.row,
                         index % 2 && {backgroundColor: '#ffffff'},
                       ]}
-                      textStyle={styles.text}
+                      textStyle={styles.textBody}
                     />
                   ))}
                 </Table>
@@ -86,7 +86,17 @@ const windowHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   container: {flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#ffffff'},
   header: {height: 50, backgroundColor: '#dbdbdb'},
-  text: {textAlign: 'center', fontWeight: '100', padding: 10},
+  textHeader: {
+    textAlign: 'center',
+    fontWeight: '100',
+    padding: 10,
+    fontWeight: 'bold',
+  },
+  textBody: {
+    textAlign: 'center',
+    fontWeight: '100',
+    padding: 10,
+  },
   dataWrapper: {marginTop: -1},
   row: {height: windowHeight * 0.15, backgroundColor: '#ffffff'},
 });
