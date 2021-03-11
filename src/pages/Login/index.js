@@ -20,6 +20,7 @@ import {
   getAllKeys,
 } from '../../Utils/asyncstorage';
 import GetLocation from 'react-native-get-location';
+import {APP_VERSION} from '../../Utils/constant';
 const Login = ({navigation}) => {
   const checkPermission = async () => {
     try {
@@ -112,6 +113,7 @@ const Login = ({navigation}) => {
           <View style={styles.footerLogoContainer}>
             <Image source={LogoKPUBawaslu} style={styles.footerLogo} />
           </View>
+          <Text style={styles.version}>version {APP_VERSION}</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -143,5 +145,10 @@ const styles = StyleSheet.create({
   },
   footerLogoContainer: {
     paddingTop: 10,
+  },
+  version: {
+    // flex: 1,
+    fontFamily: 'Cabin-Regular',
+    fontSize: 11,
   },
 });
